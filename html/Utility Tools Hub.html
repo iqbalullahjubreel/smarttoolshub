@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Utility Tools Hub</title>
+  <!-- Primary Meta Tags -->
+    <meta name="title" content="Utility Tools Hub – All-in-One Web Tools">
+    <meta name="description" content="One-stop hub for useful tools: password generator, QR creator, to-do list, reminders, unit converter, and more—all on one page!">
+    <meta name="keywords" content="online tools, utility hub, QR code generator, countdown timer, password generator, unit converter, to-do list, reminders">
+    <meta name="author" content="iqbalullah jubreel">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourdomain.com/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="Utility Tools Hub – All-in-One Web Tools">
+    <meta property="og:description" content="Access handy utilities like timers, password generators, QR codes, and more—all in one page.">
+    <meta property="og:image" content="https://yourdomain.com/assets/preview.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://yourdomain.com/">
+    <meta name="twitter:title" content="Utility Tools Hub – All-in-One Web Tools">
+    <meta name="twitter:description" content="Try tools like countdown timer, password generator, reminder maker, and more. Fast and easy to use.">
+    <meta name="twitter:image" content="https://yourdomain.com/assets/preview.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@11/lib/browser/math.js"></script>
+  <style>
+    body { margin:0; font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif; display:flex; height:100vh; background:#f9f9f9; }
+    .sidebar { width:220px; background:#2c3e50; color:#fff; display:flex; flex-direction:column; padding:1rem; }
+    .nav-button { background:none; border:none; color:white; text-align:left; padding:.8rem 1rem; margin-bottom:.5rem; font-size:1rem; cursor:pointer; transition:background .3s; }
+    .nav-button:hover { background:#34495e; }
+    .content { flex:1; padding:2rem; overflow-y:auto; }
+    .content-box { display:none; }
+    .content-box.active { display:block; }
+    .tool-box { background:white; padding:1.5rem; margin-bottom:1rem; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.05); }
+    h1,h2 { color:#2c3e50; }
+    button,input,textarea,select { padding:.5rem; margin:.5rem 0; font-size:1rem; }
+    .counts { display:flex; justify-content:space-between; font-weight:bold; }
+    #unitConverterContainer input,#unitConverterContainer select { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:6px; font-size:1rem; box-sizing:border-box; }
+    #unitConverterContainer button { width:100%; padding:12px; font-size:1rem; background:#3498db; border:none; border-radius:6px; color:#fff; cursor:pointer; margin-top:8px; }
+    #unitConverterContainer button:hover { background:#2980b9; }
+    #ucResult { margin-top:20px; font-weight:600; font-size:1.1rem; color:#2c3e50; min-height:24px; }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* To-Do UI upgrade */
+    #todo input[type="text"],
+    #todo select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    #todo button {
+      padding: 10px 16px;
+      background: #2ecc71;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    #todo button:hover {
+      background: #27ae60;
+    }
+
+    #taskBox {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+    }
+
+    #taskBox li {
+      background: #ecf0f1;
+      margin-bottom: 10px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    #taskBox li button {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #taskBox li button:hover {
+      background: #c0392b;
+    }
+
+    #taskTable th, #taskTable td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    #taskTable tr:hover {
+      background: #f1f1f1;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Utility Tools Hub</h2>
+    <button class="nav-button" onclick="show('welcome')">✨ Welcome</button>
+    <button class="nav-button" onclick="show('timer')">🕑 Countdown Timer</button>
+    <button class="nav-button" onclick="show('password')">🔐 Password Generator</button>
+    <button class="nav-button" onclick="show('qr')">📷 QR Code Generator</button>
+    <button class="nav-button" onclick="show('facts')">🧠 Random Facts (5)</button>
+    <button class="nav-button" onclick="show('reminder')">🔔 Reminder Maker</button>
+    <button class="nav-button" onclick="show('textcounter')">📝 Text Counter</button>
+    <button class="nav-button" onclick="show('todo')">✅ To‑Do List</button>
+    <button class="nav-button" onclick="show('converter')">🔄 Unit Converter</button>
+  </div>
+  <div class="content">
+  <div id="welcome" class="content-box active">
+      <h1>Welcome to Utility Tools Hub</h1>
+      <p>Explore these handy tools—all integrated into one single web page:</p>
+      <div class="tool-box"><h2>🕑 Countdown Timer</h2><p>Set a timer in minutes—it counts down and alerts you when you’re done.</p></div>
+      <div class="tool-box"><h2>🔐 Password Generator</h2><p>Create secure passwords with options for upper/lowercase, numbers, symbols.</p></div>
+      <div class="tool-box"><h2>📷 QR Code Generator</h2><p>Enter text or a link to generate a QR code instantly.</p></div>
+      <div class="tool-box"><h2>🧠 Random Facts Generator</h2><p>Fetches 5 random facts via API—learn something new every time!</p></div>
+      <div class="tool-box"><h2>🔔 Reminder Maker</h2><p>Create reminders with titles and times—triggering browser alerts.</p></div>
+      <div class="tool-box"><h2>📝 Text Counter</h2><p>Live counts of words and characters as you type.</p></div>
+      <div class="tool-box"><h2>✅ To‑Do List</h2><p>Add tasks by category, stored locally and auto-clears after one week.</p></div>
+      <div class="tool-box"><h2>🔄 Unit Converter</h2><p>Convert between any units—massive coverage including metric, imperial, astronomical and more.</p></div>
+    </div>
+
+    <div id="timer" class="content-box">
+      <h1>🕑 Countdown Timer</h1>
+      <input type="number" id="minutesInput" placeholder="Minutes" min="1" />
+      <button onclick="startCountdown()">Start</button>
+      <div id="timerDisplay">00:00</div>
+    </div>
+   <div id="password" class="content-box">
+    <h1>🔐 Password Generator</h1>
+    <div class="tool-box">
+      <label>Password Length:</label>
+      <input type="number" id="passLength" min="4" max="64" value="12" />
+
+      <div style="margin-top:10px;">
+        <label><input type="checkbox" id="upcase" checked /> Use Uppercase (A-Z)</label><br>
+        <label><input type="checkbox" id="lowcase" checked /> Use Lowercase (a-z)</label><br>
+        <label><input type="checkbox" id="nums" checked /> Use Numbers (0-9)</label><br>
+        <label><input type="checkbox" id="syms" /> Use Symbols (!@#$...)</label>
+      </div>
+
+      <button onclick="genPass()" style="background:#2ecc71;color:#fff;border:none;margin-top:10px;border-radius:6px;">Generate Password</button>
+
+      <div style="margin-top:15px; display:flex; align-items:center; gap:10px;">
+        <input id="passDisplay" readonly style="flex:1; padding:10px; font-weight:bold; background:#ecf0f1; color:#2c3e50; border:none; border-radius:6px;" />
+        <button onclick="copyPass()" style="background:#3498db; color:#fff; border:none; padding:10px; border-radius:6px; cursor:pointer;">Copy</button>
+      </div>
+    </div>
+  </div>
+
+
+   <div id="qr" class="content-box">
+    <h1>📷 QR Code Generator</h1>
+    <div class="tool-box">
+      <label for="qrInput">Enter text or URL:</label>
+      <input type="text" id="qrInput" placeholder="https://example.com" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px;" />
+
+      <button onclick="genQR()" style="background:#8e44ad; color:#fff; border:none; padding:12px; margin-top:10px; width:100%; border-radius:6px; cursor:pointer;">Generate QR Code</button>
+
+      <div id="qrCode" style="margin-top:20px; text-align:center;"></div>
+    </div>
+  </div>
+
+    <div id="facts" class="content-box">
+      <h1>🧠 Random Facts Generator</h1>
+      <div class="tool-box" style="text-align:center;">
+        <button onclick="fetchFacts()" style="background:#e67e22; color:#fff; border:none; padding:12px 20px; font-size:1rem; border-radius:6px; cursor:pointer;">Get 5 Facts</button>
+        <div id="factsLoading" style="margin-top:20px; display:none;">
+          <div class="spinner" style="margin:auto;"></div>
+          <p style="color:#888; margin-top:10px;">Fetching interesting facts...</p>
+        </div>
+        <ul id="factsList" style="margin-top:20px; text-align:left; list-style:disc; padding-left:20px;"></ul>
+      </div>
+    </div>
+
+   <div id="reminder" class="content-box">
+  <h1>🔔 Reminder Maker</h1>
+  <div class="tool-box">
+    <label>Reminder Title:</label>
+    <input type="text" id="remTitle" placeholder="e.g. Take medicine" style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc;" />
+
+    <label>Reminder Time:</label>
+    <input type="time" id="remTime" style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:1px solid #ccc;" />
+
+    <button onclick="setReminder()" style="background:#e74c3c; color:#fff; border:none; padding:12px; width:100%; border-radius:6px; cursor:pointer;">Set Reminder</button>
+
+
+    <div id="remList" style="margin-top:20px;">
+      <h3 style="color:#333;">⏳ Upcoming Reminders:</h3>
+      <ul id="remListUl" style="list-style:none; padding:0;"></ul>
+    </div>
+  </div>
+</div>
+
+<audio id="remSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+
+
+      <div id="textcounter" class="content-box">
+      <h1>📝 Live Text Counter</h1>
+      <div class="tool-box" style="padding:20px;">
+        <label for="textInput" style="font-weight:bold; margin-bottom:8px; display:block;">Enter your text:</label>
+        <textarea id="textInput" placeholder="Start typing here..." rows="8" style="
+          width: 100%;
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          font-size: 1rem;
+          font-family: 'Segoe UI', sans-serif;
+          box-sizing: border-box;
+          resize: vertical;
+        "></textarea>
+
+        <div class="counts" style="
+          display: flex;
+          justify-content: space-between;
+          margin-top: 15px;
+          font-weight: bold;
+          font-size: 1.1rem;
+          color: #2c3e50;
+          background: #ecf0f1;
+          padding: 12px;
+          border-radius: 8px;
+        ">
+          <span id="wc">📝 Words: 0</span>
+          <span id="cc">🔡 Characters: 0</span>
+        </div>
+      </div>
+    </div>
+
+   <div id="todo" class="content-box">
+      <h1>✅ To-Do List</h1>
+      <div class="tool-box">
+        <input type="text" id="taskInp" placeholder="Task description" />
+        <select id="taskCat">
+          <option>Work</option>
+          <option>School</option>
+          <option>Personal</option>
+        </select>
+        <input type="time" id="taskTime" />
+        <button onclick="addTask()">Add Task</button>
+      </div>
+
+      <div class="tool-box" style="overflow-x:auto;">
+        <table id="taskTable" style="width:100%; border-collapse:collapse;">
+          <thead>
+            <tr style="background:#ecf0f1;">
+              <th>Description</th>
+              <th>Category</th>
+              <th>Due Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="taskBox"></tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div id="converter" class="content-box">
+      <h1>🔄 Unit Converter</h1>
+      <div id="unitConverterContainer">
+        <input type="number" id="inputValue" placeholder="Enter value" />
+        <select id="fromUnit"></select>
+        <select id="toUnit"></select>
+        <button onclick="convertUnits()">Convert</button>
+        <div id="ucResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function show(id) {
+      document.querySelectorAll('.content-box').forEach(c => c.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Timer
+    let countdown;
+    function startCountdown() {
+      clearInterval(countdown);
+      let m = parseInt(document.getElementById('minutesInput').value);
+      if (isNaN(m) || m <= 0) { alert('Invalid minutes'); return; }
+      let sec = m * 60;
+      updateTimer(sec);
+      countdown = setInterval(() => {
+        sec--; updateTimer(sec);
+        if (sec <= 0) { clearInterval(countdown); alert("⏰ Time's up!"); }
+      }, 1000);
+    }
+    function updateTimer(s) {
+      document.getElementById('timerDisplay').textContent =
+        `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+    }
+
+    // Password
+    function genPass() {
+      let len = +document.getElementById('passLength').value, cs = '';
+      if (document.getElementById('upcase').checked) cs += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (document.getElementById('lowcase').checked) cs += "abcdefghijklmnopqrstuvwxyz";
+      if (document.getElementById('nums').checked) cs += "0123456789";
+      if (document.getElementById('syms').checked) cs += "!@#$%^&*()_+[]{}|;:,.<>?";
+      if (!cs) {
+        document.getElementById('passDisplay').value = 'Choose at least one';
+        return;
+      }
+      document.getElementById('passDisplay').value = Array.from({ length: len }, _ => cs[Math.floor(Math.random() * cs.length)]).join('');
+    }
+
+    function copyPass() {
+      let passInput = document.getElementById('passDisplay');
+      if (!passInput.value) return alert("Nothing to copy.");
+      passInput.select();
+      passInput.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      alert("🔒 Password copied to clipboard!");
+    }
+
+    // QR
+    function genQR() {
+      let txt = document.getElementById('qrInput').value.trim();
+      if (!txt) {
+        document.getElementById('qrCode').innerHTML = "<p style='color:red;'>⚠️ Enter text to generate QR.</p>";
+        return;
+      }
+      document.getElementById('qrCode').innerHTML = `
+        <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(txt)}&size=200x200" alt="QR Code" style="margin-top:15px; border:6px solid #ecf0f1; border-radius:12px;" />
+        <p style="margin-top:10px; font-size:0.9rem; color:#555;">Right-click or long-press to save</p>
+      `;
+    }
+
+    // Facts
+    async function fetchFacts() {
+      let ul = document.getElementById('factsList');
+      let loader = document.getElementById('factsLoading');
+      ul.innerHTML = '';
+      loader.style.display = 'block';
+
+      // Simulate 3-second loading
+      await new Promise(r => setTimeout(r, 3000));
+
+      for (let i = 0; i < 5; i++) {
+        try {
+          let r = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
+          let j = await r.json();
+          let li = document.createElement('li');
+          li.textContent = j.text;
+          ul.appendChild(li);
+        } catch (e) {
+          ul.innerHTML = '<li style="color:red;">Failed to fetch facts. Try again.</li>';
+          break;
+        }
+      }
+
+      loader.style.display = 'none';
+    }
+
+    // Reminder
+const REM_KEY = 'savedReminders';
+const sound = document.getElementById('remSound');
+
+// Request notification permission once
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    function loadReminders() {
+      const arr = JSON.parse(localStorage.getItem(REM_KEY) || '[]');
+      return arr;
+    }
+
+    function saveReminders(arr) {
+      localStorage.setItem(REM_KEY, JSON.stringify(arr));
+    }
+
+    function drawReminders() {
+      const ul = document.getElementById('remListUl');
+      ul.innerHTML = '';
+      const reminders = loadReminders();
+
+      reminders.forEach((rem, idx) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '8px';
+        li.style.display = 'flex';
+        li.style.justifyContent = 'space-between';
+        li.style.alignItems = 'center';
+
+        const text = document.createElement('span');
+        text.textContent = `📌 "${rem.title}" at ${rem.time}`;
+        li.appendChild(text);
+
+        const controls = document.createElement('span');
+
+        const del = document.createElement('button');
+        del.textContent = '✕';
+        del.style.marginLeft = '8px';
+        del.onclick = () => deleteReminder(idx);
+        controls.appendChild(del);
+
+        li.appendChild(controls);
+        ul.appendChild(li);
+      });
+    }
+
+      function scheduleReminder(rem, idx) {
+        const [hh, mm] = rem.time.split(':').map(Number);
+        const now = new Date();
+        const target = new Date();
+        target.setHours(hh, mm, 0, 0);
+        const ms = target - now;
+
+        console.log(`🕒 Scheduling reminder "${rem.title}" for ${rem.time}`);
+        console.log("🔎 Time until due:", ms, "ms");
+        console.log("🔔 Notification support:", 'Notification' in window);
+        console.log("🔔 Permission:", Notification.permission);
+
+        if (ms <= 0) {
+          console.warn("⚠️ Skipping past reminder:", rem);
+          return;
+        }
+
+        rem.timeoutId = setTimeout(() => {
+          console.log("⏰ Reminder due now:", rem.title);
+
+          // 🔊 Play sound
+          try {
+            sound.currentTime = 0;
+            sound.play().then(() => {
+              console.log("✅ Sound played");
+            }).catch(e => {
+              console.error("❌ Sound play error:", e);
+            });
+          } catch (e) {
+            console.error("❌ Audio error:", e);
+          }
+
+          // 🔔 Show Notification
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification("🔔 Reminder Due!", {
+              body: `"${rem.title}" at ${rem.time}`,
+              icon: 'https://cdn-icons-png.flaticon.com/512/1827/1827370.png'
+            });
+            console.log("✅ Notification sent");
+          } else {
+            alert(`🔔 Reminder: "${rem.title}" at ${rem.time}`);
+          }
+
+          cleanupExpired();
+        }, ms);
+      }
+
+    function setupAll() {
+      const rems = loadReminders();
+      rems.forEach((rem, idx) => scheduleReminder(rem, idx));
+      drawReminders();
+    }
+
+    function setReminder() {
+      const title = document.getElementById('remTitle').value.trim();
+      const time = document.getElementById('remTime').value;
+      if (!title || !time) return alert("⚠️ Please enter both title and time.");
+
+      const reminders = loadReminders();
+      reminders.push({ title, time, ts: Date.now() });
+      saveReminders(reminders);
+      drawReminders();
+      scheduleReminder(reminders[reminders.length - 1], reminders.length - 1);
+
+      document.getElementById('remTitle').value = '';
+      document.getElementById('remTime').value = '';
+    }
+
+    function deleteReminder(idx) {
+      const rems = loadReminders();
+      clearTimeout(rems[idx].timeoutId);
+      rems.splice(idx, 1);
+      saveReminders(rems);
+      drawReminders();
+    }
+
+    function cleanupExpired() {
+      const now = Date.now();
+      let rems = loadReminders();
+      rems = rems.filter(rem => {
+        const [hh, mm] = rem.time.split(':').map(Number);
+        const target = new Date();
+        target.setHours(hh, mm, 0, 0);
+        return target.getTime() > now;
+      });
+      saveReminders(rems);
+      drawReminders();
+    }
+
+    setupAll();
+
+
+    // Text Counter
+    document.getElementById('textInput').addEventListener('input', () => {
+      let val = document.getElementById('textInput').value;
+      document.getElementById('wc').textContent = `Words: ${val.trim().split(/\s+/).filter(x => x).length}`;
+      document.getElementById('cc').textContent = `Chars: ${val.length}`;
+    });
+
+    // To‑Do
+   const TASK_KEY = 'todoList';
+    const WEEK = 7 * 24 * 60 * 60 * 1000;
+
+    function addTask() {
+      const desc = document.getElementById('taskInp').value.trim();
+      const cat = document.getElementById('taskCat').value;
+      const time = document.getElementById('taskTime').value;
+
+      if (!desc || !time) return alert("Please fill in description and time.");
+
+      const list = JSON.parse(localStorage.getItem(TASK_KEY) || '[]');
+      list.push({ desc, cat, time, ts: Date.now() });
+      localStorage.setItem(TASK_KEY, JSON.stringify(list));
+
+      document.getElementById('taskInp').value = '';
+      document.getElementById('taskTime').value = '';
+      drawTasks();
+    }
+
+   function drawTasks() {
+    const list = JSON.parse(localStorage.getItem(TASK_KEY) || '[]')
+      .filter(t => Date.now() - t.ts < WEEK);
+    localStorage.setItem(TASK_KEY, JSON.stringify(list));
+
+    const tbody = document.getElementById('taskBox');
+    tbody.innerHTML = '';
+
+    list.forEach((t, i) => {
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td>${t.desc}</td>
+        <td>${t.cat}</td>
+        <td>${t.time}</td>
+        <td>
+          <button onclick="completeTask(${i})" style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:4px;margin-right:4px;">Done✅</button>
+          <button onclick="editTask(${i})" style="background:#f39c12;color:#fff;border:none;padding:6px 10px;border-radius:4px;margin-right:4px;">Edit✏️</button>
+          <button onclick="delTask(${i})" style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:4px;">Delete✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+
+      scheduleNotification(t, i);
+    });
+    }
+
+    function delTask(i) {
+      let list = JSON.parse(localStorage.getItem(TASK_KEY) || '[]');
+      list.splice(i, 1);
+      localStorage.setItem(TASK_KEY, JSON.stringify(list));
+      drawTasks();
+    }
+
+    function editTask(i) {
+      const list = JSON.parse(localStorage.getItem(TASK_KEY) || '[]');
+      const t = list[i];
+
+      document.getElementById('taskInp').value = t.desc;
+      document.getElementById('taskCat').value = t.cat;
+      document.getElementById('taskTime').value = t.time;
+
+      list.splice(i, 1);
+      localStorage.setItem(TASK_KEY, JSON.stringify(list));
+      drawTasks();
+    }
+
+    function scheduleNotification(task, index) {
+      if (!('Notification' in window)) return;
+
+      const [hh, mm] = task.time.split(':').map(Number);
+      const now = new Date();
+      const due = new Date();
+      due.setHours(hh, mm, 0, 0);
+
+      if (due <= now) return;
+
+      const timeout = due - now;
+
+      setTimeout(() => {
+        let currentList = JSON.parse(localStorage.getItem(TASK_KEY) || '[]');
+        if (currentList[index]) {
+          showTaskReminder(currentList[index]);
+        }
+      }, timeout);
+    }
+
+    function completeTask(i) {
+      let list = JSON.parse(localStorage.getItem(TASK_KEY) || '[]');
+      list.splice(i, 1);
+      localStorage.setItem(TASK_KEY, JSON.stringify(list));
+      drawTasks();
+    }
+
+    function showTaskReminder(task) {
+      if (Notification.permission === 'granted') {
+        new Notification("🔔 To-Do Reminder", {
+          body: `You have not completed: "${task.desc}"`,
+          icon: 'https://cdn-icons-png.flaticon.com/512/1827/1827370.png'
+        });
+      } else {
+        alert(`🔔 Reminder: You have not completed "${task.desc}"`);
+      }
+    }
+
+    // ask once
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    drawTasks();
+
+    const fromSel = document.getElementById('fromUnit'), toSel = document.getElementById('toUnit');
+    Object.keys(math.Unit.UNITS).sort().forEach(u => {
+      fromSel.add(new Option(u, u)); toSel.add(new Option(u, u));
+    });
+    fromSel.value = 'm'; toSel.value = 'ft';
+    function convertUnits() {
+      let val = parseFloat(document.getElementById('inputValue').value), f = fromSel.value, t = toSel.value, resDiv = document.getElementById('ucResult');
+      if (isNaN(val)) { resDiv.textContent = 'Please enter a valid number.'; return; }
+      try { resDiv.textContent = `${val} ${f} = ${math.unit(val, f).to(t)}`; }
+      catch (e) { resDiv.textContent = '❌ Conversion error: ' + e.message; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Tools</title>
+  <!-- SEO Essentials -->
+  <title>Finance Tools – Smart Calculators for Your Money Goals</title>
+  <meta name="description" content="Use Finance Tools to calculate loans, convert currencies, plan your budget, estimate taxes, track savings, and much more – all in one place!" />
+  <meta name="keywords" content="finance tools, loan calculator, currency converter, tax estimator, budget planner, savings tracker, ROI calculator, tip calculator, discount calculator" />
+  <meta name="author" content="iqbalullah jubreel" />
+
+  <!-- Open Graph (for social media preview) -->
+  <meta property="og:title" content="Finance Tools – Smart Calculators for Your Money Goals" />
+  <meta property="og:description" content="All-in-one finance tools to help you manage your money better. From loan and tax calculators to savings trackers and investment estimators." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourdomain.com" />
+  <meta property="og:image" content="https://yourdomain.com/preview.jpg" />
+
+  <!-- Twitter Card (for Twitter preview) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Finance Tools – Smart Calculators for Your Money Goals" />
+  <meta name="twitter:description" content="Smart and simple tools to plan your finances, calculate ROI, estimate taxes, and track savings." />
+  <meta name="twitter:image" content="https://yourdomain.com/preview.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://yourdomain.com" />
+
+  <style>
+    body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Prevent body scroll */
+    background-color: #f9f9f9;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh; /* full viewport height */
+    background-color: #2c3e50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-y: auto; /* in case sidebar content overflows vertically */
+  }
+
+  .content {
+    margin-left: 220px; /* leave space for fixed sidebar */
+    padding: 40px 50px;
+    background: #fff;
+    height: 100vh;
+    overflow-y: auto; /* only content scrolls */
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.03);
+    box-sizing: border-box;
+    flex-grow: 1;
+  }
+
+
+
+   .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+  .sidebar button {
+    background: none;
+      border: none;
+      color: white;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+  }
+
+  .sidebar button:hover, .sidebar button:focus {
+    background-color: #4a6fb0;
+    outline: none;
+  }
+
+  
+  .tool {
+    display: none;
+    background: #fff;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .tool.active {
+    display: block;
+  }
+
+   .tool-box {
+      background: #fff;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+  input, select {
+    padding: 10px 15px;
+    margin: 14px 0;
+    width: 100%;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    transition: border-color 0.3s ease;
+  }
+
+  input:focus, select:focus {
+    border-color: #2e4a81;
+    outline: none;
+  }
+
+  button {
+    background-color: #2e4a81;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover, button:focus {
+    background-color: #4a6fb0;
+    outline: none;
+  }
+
+  h2 {
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+  }
+
+  p {
+    margin-top: 15px;
+    color: #333;
+  }
+  /* Welcome page enhancements */
+  #welcome h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #2e4a81;
+    margin-bottom: 15px;
+  }
+
+  #welcome .intro {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 35px;
+    max-width: 700px;
+    line-height: 1.6;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+
+  .feature-card {
+    background: #f0f6ff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(46, 74, 129, 0.15);
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card h3 {
+    margin-top: 0;
+    color: #2e4a81;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .feature-card p {
+    color: #444;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(46, 74, 129, 0.25);
+  }
+
+  .get-started-btn {
+    background-color: #2e4a81;
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(46, 74, 129, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .get-started-btn:hover, .get-started-btn:focus {
+    background-color: #4a6fb0;
+    box-shadow: 0 10px 25px rgba(46, 74, 129, 0.6);
+    outline: none;
+  }
+
+</style>
+
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Finance Tools</h2>
+    <button onclick="showTool('welcome')">🏠 Welcome</button>
+    <button onclick="showTool('currency')">💱 Currency Converter</button>
+    <button onclick="showTool('loan')">💰 Loan Calculator</button>
+    <button onclick="showTool('tax')">📊 Tax Estimator</button>
+    <button onclick="showTool('budget')">📒 Budget Planner</button>
+    <button onclick="showTool('savings')">🏦 Savings Tracker</button>
+    <button onclick="showTool('tip')">💸 Tip Calculator</button>
+    <button onclick="showTool('discount')">🛍️ Discount Calculator</button>
+    <button onclick="showTool('investment')">📈 Investment ROI</button>
+  </div>
+
+  <div class="content">
+    <div id="welcome" class="tool active">
+      <h1>Welcome to Finance Tools</h1>
+      <p class="intro">
+        Empower your financial decisions with a suite of easy-to-use calculators and planners designed to help you manage money smarter and achieve your goals faster.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>💱 Currency Converter</h3>
+          <p>Instantly convert between currencies with up-to-date exchange rates.</p>
+        </div>
+        <div class="feature-card">
+          <h3>💰 Loan Calculator</h3>
+          <p>Calculate your monthly payments and plan your loans effectively.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📒 Budget Planner</h3>
+          <p>Track your income and expenses to maintain a healthy budget.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🏦 Savings Tracker</h3>
+          <p>Monitor your savings goals and stay motivated to reach them.</p>
+        </div>
+      </div>
+
+      <button onclick="showTool('currency')" class="get-started-btn">Get Started →</button>
+    </div>
+
+
+    <div id="currency" class="tool">
+      <h2>Currency Converter</h2>
+      <input type="number" id="amount" placeholder="Enter amount" />
+      <select id="fromCurrency"></select>
+      <select id="toCurrency"></select>
+      <button onclick="convertCurrency()">Convert</button>
+      <p id="result"></p>
+    </div>
+
+    <div id="loan" class="tool">
+      <h2>Loan Calculator</h2>
+      <input type="number" id="loanAmount" placeholder="Loan Amount" />
+      <input type="number" id="interestRate" placeholder="Annual Interest Rate (%)" />
+      <input type="number" id="loanTerm" placeholder="Loan Term (years)" />
+      <button onclick="calculateLoan()">Calculate</button>
+      <p id="loanResult"></p>
+    </div>
+
+    <div id="tax" class="tool">
+      <h2>Tax Estimator</h2>
+      <input type="number" id="income" placeholder="Enter your income" />
+      <button onclick="estimateTax()">Estimate Tax</button>
+      <p id="taxResult"></p>
+    </div>
+
+    <div id="budget" class="tool">
+      <h2>Budget Planner</h2>
+      <input type="number" id="incomeBudget" placeholder="Total Income" />
+      <input type="number" id="expenses" placeholder="Total Expenses" />
+      <button onclick="calculateBudget()">Plan</button>
+      <p id="budgetResult"></p>
+    </div>
+
+    <div id="savings" class="tool">
+      <h2>Savings Tracker</h2>
+      <input type="number" id="goalAmount" placeholder="Savings Goal" />
+      <input type="number" id="currentAmount" placeholder="Current Savings" />
+      <button onclick="trackSavings()">Track</button>
+      <p id="savingsResult"></p>
+    </div>
+
+    <div id="tip" class="tool">
+      <h2>Tip Calculator</h2>
+      <input type="number" id="billAmount" placeholder="Bill Amount" />
+      <input type="number" id="tipPercent" placeholder="Tip Percentage" />
+      <button onclick="calculateTip()">Calculate Tip</button>
+      <p id="tipResult"></p>
+    </div>
+
+    <div id="discount" class="tool">
+      <h2>Discount Calculator</h2>
+      <input type="number" id="originalPrice" placeholder="Original Price" />
+      <input type="number" id="discountPercent" placeholder="Discount (%)" />
+      <button onclick="calculateDiscount()">Calculate Discount</button>
+      <p id="discountResult"></p>
+    </div>
+
+    <div id="investment" class="tool">
+      <h2>Investment ROI Calculator</h2>
+      <input type="number" id="initial" placeholder="Initial Investment ($)" />
+      <input type="number" id="final" placeholder="Final Value ($)" />
+      <button onclick="calculateROI()">Calculate</button>
+      <p id="roiResult"></p>
+    </div>
+  </div>
+
+  <script>
+    const tools = document.querySelectorAll(".tool");
+
+    function showTool(id) {
+      tools.forEach((tool) => {
+        tool.classList.remove("active");
+      });
+      document.getElementById(id).classList.add("active");
+    }
+
+    async function populateCurrencies() {
+      const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+      const data = await res.json();
+      const from = document.getElementById("fromCurrency");
+      const to = document.getElementById("toCurrency");
+
+      for (let currency in data.rates) {
+        const option1 = document.createElement("option");
+        option1.value = currency;
+        option1.textContent = currency;
+        from.appendChild(option1);
+
+        const option2 = document.createElement("option");
+        option2.value = currency;
+        option2.textContent = currency;
+        to.appendChild(option2);
+      }
+    }
+
+    function convertCurrency() {
+      const amount = document.getElementById("amount").value;
+      const from = document.getElementById("fromCurrency").value;
+      const to = document.getElementById("toCurrency").value;
+
+      fetch(`https://api.exchangerate-api.com/v4/latest/${from}`)
+        .then(res => res.json())
+        .then(data => {
+          const rate = data.rates[to];
+          const result = amount * rate;
+          document.getElementById("result").textContent = `${amount} ${from} = ${result.toFixed(2)} ${to}`;
+        });
+    }
+
+    function calculateLoan() {
+      const principal = parseFloat(document.getElementById("loanAmount").value);
+      const annualRate = parseFloat(document.getElementById("interestRate").value) / 100;
+      const years = parseFloat(document.getElementById("loanTerm").value);
+      const monthlyRate = annualRate / 12;
+      const payments = years * 12;
+      const monthly = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -payments));
+      document.getElementById("loanResult").textContent = `Monthly Payment: $${monthly.toFixed(2)}`;
+    }
+
+    function estimateTax() {
+      const income = parseFloat(document.getElementById("income").value);
+      const tax = income * 0.15;
+      document.getElementById("taxResult").textContent = `Estimated Tax: $${tax.toFixed(2)}`;
+    }
+
+    function calculateBudget() {
+      const income = parseFloat(document.getElementById("incomeBudget").value);
+      const expenses = parseFloat(document.getElementById("expenses").value);
+      const balance = income - expenses;
+      document.getElementById("budgetResult").textContent = `Remaining Budget: $${balance.toFixed(2)}`;
+    }
+
+    function trackSavings() {
+      const goal = parseFloat(document.getElementById("goalAmount").value);
+      const current = parseFloat(document.getElementById("currentAmount").value);
+      const remaining = goal - current;
+      document.getElementById("savingsResult").textContent = `You need $${remaining.toFixed(2)} more to reach your goal.`;
+    }
+
+    function calculateTip() {
+      const bill = parseFloat(document.getElementById("billAmount").value);
+      const tip = parseFloat(document.getElementById("tipPercent").value);
+      const totalTip = bill * (tip / 100);
+      document.getElementById("tipResult").textContent = `Tip Amount: $${totalTip.toFixed(2)}`;
+    }
+
+    function calculateDiscount() {
+      const price = parseFloat(document.getElementById("originalPrice").value);
+      const discount = parseFloat(document.getElementById("discountPercent").value);
+      const savings = price * (discount / 100);
+      const finalPrice = price - savings;
+      document.getElementById("discountResult").textContent = `Final Price: $${finalPrice.toFixed(2)} (You save $${savings.toFixed(2)})`;
+    }
+
+    function calculateROI() {
+      const initial = parseFloat(document.getElementById("initial").value);
+      const final = parseFloat(document.getElementById("final").value);
+      const roi = ((final - initial) / initial) * 100;
+      document.getElementById("roiResult").textContent = isFinite(roi) ? `ROI: ${roi.toFixed(2)}%` : "Invalid input";
+    }
+
+    populateCurrencies();
+  </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Tools Hub</title>
+    <meta name="description" content="All-in-one academic tool suite for students. Calculate CGPA, predict grades, generate multiplication tables, use a scientific calculator, and track BMI—all in one place!" />
+    <meta name="keywords" content="CGPA calculator, Grade predictor, Multiplication table, Scientific calculator, BMI calculator, student tools, academic utilities" />
+    <meta name="author" content="iqbalullah jubreel" />
+
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="Academic Tools Hub" />
+    <meta property="og:description" content="Boost your academic success with tools like CGPA calculators, scientific calculators, and more!" />
+    <meta property="og:image" content="https://yourdomain.com/preview-image.png" /> <!-- Optional: update with a real preview image URL -->
+    <meta property="og:url" content="https://yourdomain.com/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Favicon (optional but recommended) -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .nav-button {
+      background: none;
+      border: none;
+      color: white;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .nav-button:hover {
+      background-color: #34495e;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .tool-box {
+      background: #fff;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+    input, select, button {
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .tool-title {
+      color: #3498db;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    table th {
+      background-color: #f0f0f0;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .calc-container {
+      background-color: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 20px;
+      width: 320px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .display {
+      background-color: #ffffff;
+      color: #2f3640;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: right;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      border: 1px solid #dcdde1;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 1rem;
+      background-color: #dcdde1;
+      color: #2f3640;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #ced6e0;
+    }
+
+    .btn.func {
+      background-color: #70a1ff;
+      color: white;
+    }
+
+    .btn.func:hover {
+      background-color: #1e90ff;
+    }
+
+    .btn.equals {
+      grid-column: span 2;
+      background-color: #ff6b6b;
+    }
+
+    .btn.clear {
+      background-color: #f7b731;
+    }
+
+    .title {
+      color: #2c3e50;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .content-box {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Academic Tools</h2>
+    <button class="nav-button" onclick="showContent('welcome')">🏠 Welcome</button>
+    <button class="nav-button" onclick="showContent('cgpa')">📊 CGPA Calculator</button>
+    <button class="nav-button" onclick="showContent('grade')">📈 Grade Predictor</button>
+    <button class="nav-button" onclick="showContent('multiplication')">🧮 Multiplication Table</button>
+    <button class="nav-button" onclick="showContent('scientific')">🔬 Scientific Calculator</button>
+    <button class="nav-button" onclick="showContent('bmi')">⚖️ BMI Calculator</button>
+  </div>
+
+  <div class="main-content">
+
+    <!-- Welcome Page -->
+    <div id="welcome" class="content-box">
+      <h1>Welcome to Your Academic Toolbox 🧠📚</h1>
+      <p>Boost your academic productivity with our powerful tools designed specifically for students. Whether you're trying to calculate your GPA, predict your grades, or crunch numbers like a pro, you're covered!</p>
+      <div class="tool-box">
+        <h2 class="tool-title">📊 CGPA Calculator</h2>
+        <p>This tool helps you determine your cumulative GPA by inputting your grade points and course units for each subject or semester.</p>
+      </div>
+      <div class="tool-box">
+        <h2 class="tool-title">📈 Grade Predictor</h2>
+        <p>Plan ahead by estimating your final grade based on the test scores you've achieved so far and how much each assessment counts.</p>
+      </div>
+      <div class="tool-box">
+        <h2 class="tool-title">🧮 Multiplication Table</h2>
+        <p>Quickly generate multiplication tables for any number — ideal for math practice or tutoring support.</p>
+      </div>
+      <div class="tool-box">
+        <h2 class="tool-title">🔬 Scientific Calculator</h2>
+        <p>Advanced math operations like sin, cos, tan, square roots, and more, right in your browser. A full scientific calculator experience!</p>
+      </div>
+      <div class="tool-box">
+        <h2 class="tool-title">⚖️ BMI Calculator</h2>
+        <p>Track your health easily by calculating your Body Mass Index (BMI) based on your height and weight.</p>
+      </div>
+      </div>
+
+    <!-- CGPA Calculator -->
+   <div id="cgpa" class="content-box">
+    <h1>📚 CGPA Calculator</h1>
+    <div class="tool-box" style="max-width:600px;">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <input type="number" placeholder="Grade Point (e.g. 60)" id="gradePoint" style="flex:1;" />
+        <input type="number" placeholder="Course Unit" id="unit" style="flex:1;" />
+        <button onclick="addCourse()" style="background:#3498db; color:#fff; border:none; border-radius:6px; padding:10px 16px;">➕</button>
+      </div>
+
+      <table style="width:100%; border-collapse:collapse;">
+        <thead style="background:#ecf0f1;">
+          <tr>
+            <th style="padding:10px; text-align:left;">Grade Point</th>
+            <th style="padding:10px; text-align:left;">Unit</th>
+            <th style="padding:10px; text-align:left;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="courseList"></tbody>
+      </table>
+
+      <p id="cgpaResult" style="margin-top:15px; font-weight:bold; font-size:1.2rem; color:#2c3e50;"></p>
+    </div>
+  </div>
+
+
+    <!-- Grade Predictor -->
+    <div id="grade" class="content-box hidden">
+      <h1>Grade Predictor</h1>
+      <table id="gradeTable">
+        <tr>
+          <th>Expected Score (%)</th>
+          <th>Weight (%)</th>
+        </tr>
+      </table>
+      <button onclick="addAssessment()">+ Add Assessment</button>
+      <button onclick="predictGrade()">Predict Final Grade</button>
+      <p id="predictedGrade"></p>
+    </div>
+
+    <!-- Multiplication Table -->
+   <div id="multiplication" class="content-box">
+      <h1>🧮 Multiplication Table Generator</h1>
+      <div class="tool-box" style="max-width:500px;">
+        <input type="number" placeholder="Enter a number (e.g. 7)" id="multiNum" style="width:100%; padding:12px; font-size:1rem; border-radius:6px; border:1px solid #ccc;" />
+        <button onclick="generateTable()" style="margin-top:10px; width:100%; background:#3498db; color:#fff; border:none; padding:12px; border-radius:6px; font-size:1rem; cursor:pointer;">🔢 Generate Table</button>
+
+        <div id="tableResult" style="margin-top:20px; font-size:1.1rem; background:#ecf0f1; padding:15px; border-radius:8px; line-height:1.6;"></div>
+      </div>
+    </div>
+
+
+    <!-- Scientific Calculator -->
+    <div id="scientific" class="content-box hidden">
+      <div class="main">
+        <div class="title">Casio-Style Scientific Calculator</div>
+        <div class="calc-container">
+          <div id="display" class="display">0</div>
+          <div class="buttons">
+            <button class="btn clear" onclick="clearDisplay()">AC</button>
+            <button class="btn" onclick="append('(')">(</button>
+            <button class="btn" onclick="append(')')">)</button>
+            <button class="btn" onclick="append('%')">%</button>
+            <button class="btn" onclick="delChar()">DEL</button>
+
+            <button class="btn" onclick="append('7')">7</button>
+            <button class="btn" onclick="append('8')">8</button>
+            <button class="btn" onclick="append('9')">9</button>
+            <button class="btn" onclick="append('/')">÷</button>
+            <button class="btn func" onclick="append('√(')">√</button>
+
+            <button class="btn" onclick="append('4')">4</button>
+            <button class="btn" onclick="append('5')">5</button>
+            <button class="btn" onclick="append('6')">6</button>
+            <button class="btn" onclick="append('*')">×</button>
+            <button class="btn func" onclick="append('Math.pow(')">xʸ</button>
+
+            <button class="btn" onclick="append('1')">1</button>
+            <button class="btn" onclick="append('2')">2</button>
+            <button class="btn" onclick="append('3')">3</button>
+            <button class="btn" onclick="append('-')">−</button>
+            <button class="btn func" onclick="append('sin(')">sin</button>
+
+            <button class="btn" onclick="append('0')">0</button>
+            <button class="btn" onclick="append('.')">.</button>
+            <button class="btn equals" onclick="calculate()">=</button>
+            <button class="btn" onclick="append('+')">+</button>
+            <button class="btn func" onclick="append('cos(')">cos</button>
+
+            <button class="btn func" onclick="append('tan(')">tan</button>
+            <button class="btn func" onclick="append('log(')">log</button>
+            <button class="btn func" onclick="append('exp(')">exp</button>
+            <button class="btn func" onclick="append('π')">π</button>
+            <button class="btn func" onclick="append('e')">e</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BMI Calculator -->
+    <div id="bmi" class="content-box hidden">
+      <h1>BMI Calculator</h1>
+      <input type="number" id="weight" placeholder="Weight (kg)">
+      <input type="number" id="height" placeholder="Height (m)">
+      <button onclick="calculateBMI()">Calculate BMI</button>
+      <p id="bmiResult"></p>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+
+    function showContent(id) {
+      const boxes = document.querySelectorAll('.content-box');
+      boxes.forEach(box => box.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function append(value) {
+      if (display.innerText === "0" || display.innerText === "Error") {
+        display.innerText = value;
+      } else {
+        display.innerText += value;
+      }
+    }
+
+    function clearDisplay() {
+      display.innerText = "0";
+    }
+
+    function delChar() {
+      if (display.innerText.length === 1 || display.innerText === "Error") {
+        display.innerText = "0";
+      } else {
+        display.innerText = display.innerText.slice(0, -1);
+      }
+    }
+
+    function calculate() {
+      try {
+        let expression = display.innerText
+          .replace(/√/g, 'Math.sqrt')
+          .replace(/sin/g, 'Math.sin')
+          .replace(/cos/g, 'Math.cos')
+          .replace(/tan/g, 'Math.tan')
+          .replace(/log/g, 'Math.log')
+          .replace(/exp/g, 'Math.exp')
+          .replace(/π/g, 'Math.PI')
+          .replace(/e/g, 'Math.E');
+
+        let result = eval(expression);
+        display.innerText = result;
+      } catch {
+        display.innerText = "Error";
+      }
+    }
+
+    let courses = [];
+
+      function addCourse() {
+        const gp = parseFloat(document.getElementById('gradePoint').value);
+        const unit = parseFloat(document.getElementById('unit').value);
+        if (isNaN(gp) || isNaN(unit) || unit <= 0) {
+          alert("⚠️ Enter valid grade point and unit.");
+          return;
+        }
+
+        courses.push({ gp, unit });
+        document.getElementById('gradePoint').value = '';
+        document.getElementById('unit').value = '';
+        drawCourses();
+        calculateCGPA();
+      }
+
+      function drawCourses() {
+        const tbody = document.getElementById('courseList');
+        tbody.innerHTML = '';
+        courses.forEach((c, i) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="padding:8px;">${c.gp}</td>
+            <td style="padding:8px;">${c.unit}</td>
+            <td style="padding:8px;">
+              <button onclick="removeCourse(${i})" style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:4px;">✕</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function removeCourse(i) {
+        courses.splice(i, 1);
+        drawCourses();
+        calculateCGPA();
+      }
+
+      function calculateCGPA() {
+        if (courses.length === 0) {
+          document.getElementById('cgpaResult').innerText = '';
+          return;
+        }
+        let totalGP = 0, totalUnits = 0;
+        courses.forEach(c => {
+          totalGP += c.gp;
+          totalUnits += c.unit;
+        });
+        const cgpa = totalGP / totalUnits;
+        document.getElementById('cgpaResult').innerText = `🎓 Your CGPA is: ${cgpa.toFixed(2)}`;
+      }
+
+    function generateTable() {
+      const num = parseInt(document.getElementById('multiNum').value);
+      const resultDiv = document.getElementById('tableResult');
+      resultDiv.innerHTML = '';
+
+      if (isNaN(num)) {
+        resultDiv.innerHTML = `<p style="color:red;">⚠️ Please enter a valid number.</p>`;
+        return;
+      }
+
+      let table = `<h3 style="margin-bottom:12px; color:#2c3e50;">Multiplication Table for ${num}</h3>`;
+      for (let i = 1; i <= 12; i++) {
+        table += `<div style="padding:6px 0; border-bottom:1px solid #ddd;">${num} × ${i} = <strong>${num * i}</strong></div>`;
+      }
+
+      resultDiv.innerHTML = table;
+    }
+
+    function calculateBMI() {
+      const weight = parseFloat(document.getElementById('weight').value);
+      const height = parseFloat(document.getElementById('height').value);
+      if (!isNaN(weight) && !isNaN(height) && height !== 0) {
+        const bmi = weight / (height * height);
+        document.getElementById('bmiResult').innerText = `Your BMI is: ${bmi.toFixed(2)}`;
+      } else {
+        document.getElementById('bmiResult').innerText = "Please enter valid numbers.";
+      }
+    }
+
+    function addAssessment() {
+      const table = document.getElementById('gradeTable');
+      const row = table.insertRow();
+      row.innerHTML = `
+        <td><input type="number" min="0" max="100" placeholder="e.g. 85"></td>
+        <td><input type="number" min="0" max="100" placeholder="e.g. 20"></td>
+      `;
+    }
+
+    function predictGrade() {
+      const rows = document.querySelectorAll('#gradeTable tr');
+      let total = 0;
+      let weightSum = 0;
+
+      for (let i = 1; i < rows.length; i++) {
+        const score = parseFloat(rows[i].cells[0].querySelector('input').value);
+        const weight = parseFloat(rows[i].cells[1].querySelector('input').value);
+        if (!isNaN(score) && !isNaN(weight)) {
+          total += score * (weight / 100);
+          weightSum += weight;
+        }
+      }
+
+      const final = weightSum ? total.toFixed(2) : "N/A";
+      document.getElementById('predictedGrade').textContent = `Predicted Final Grade: ${final}%`;
+    }
+
+    // Initialize
+    showContent('welcome');
+    addAssessment();
+  </script>
+</body>
+</html>
