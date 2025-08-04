@@ -1,13 +1,15 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/landing-page/html/index.html" },
-    { "source": "/academic", "destination": "/landing-page/html/Academic-Tools.html" },
-    { "source": "/finance", "destination": "/landing-page/html/Finance-Tools.html" },
-    { "source": "/fun", "destination": "/landing-page/html/Fun-Personal-Tools.html" },
-    { "source": "/utilities", "destination": "/landing-page/html/Utility-Tools-Hub.html" },
-    
-    { "source": "/(.*)", "destination": "/landing-page/html/index.html" }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*\\.html)$",
+      "dest": "/landing-page/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/landing-page/index.html"
+    }
+  ]
 }
