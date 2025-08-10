@@ -7,25 +7,29 @@
 
   <meta name="google-site-verification" content="C4kjVFRkp8L_JETvH1hs-vV-qu0V2_oDvNoQOFkrq74" />
 
-  
   <meta name="description" content="Use free online tools like GPA calculator, finance tools, BMI checker, love quizzes, and daily utilities - all in one smart, mobile-friendly hub." />
   <meta name="keywords" content="free online tools,Calculators, GPA calculator, finance calculator, love quiz, fun tools, student tools, BMI calculator, online utilities, productivity tools" />
   <meta name="author" content="iqbalullah jubreel" />
+  
   <!-- Open Graph / Facebook Preview -->
   <meta property="og:title" content="Smart Kits Hub - Free Tools for Students & Everyday Life" />
   <meta property="og:description" content="Try tools for academics, finance, health, fun quizzes, and more - no sign-up, just instant results!" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://smartkitshub.vercel.app" />
   <meta property="og:image" content="https://smartkitshub.vercel.app/preview_image.jpg" />
+  
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Smart Kits Hub - All-in-One Free Toolset" />
   <meta name="twitter:description" content="GPA calculators, finance tools, BMI checkers, love quizzes and more - all free and mobile-friendly!" />
   <meta name="twitter:image" content="https://smartkitshub.vercel.app/preview_image.jpg" />
-  <!-- Favicon (optional) -->
-   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
   <style>
     :root {
       --primary: #4f46e5;
@@ -35,19 +39,24 @@
       --gray: #6b7280;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       background: var(--light);
       color: var(--dark);
       scroll-behavior: smooth;
+      line-height: 1.6;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 40px;
+      padding: 15px 20px;
       background: white;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       position: sticky;
@@ -56,140 +65,246 @@
     }
 
     .logo {
-      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
       font-weight: bold;
       color: var(--primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 15px;
+      align-items: center;
     }
 
     nav a {
-      margin-left: 20px;
       color: var(--dark);
       text-decoration: none;
       font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background: var(--light);
+      color: var(--primary);
     }
 
     .hero {
       text-align: center;
-      padding: 100px 30px;
+      padding: 60px 20px;
       background: linear-gradient(135deg, #4f46e5, #9333ea);
       color: white;
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     .hero h1 {
-      font-size: 3rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
       margin-bottom: 20px;
+      font-weight: 800;
+      line-height: 1.2;
+      max-width: 800px;
     }
 
     .hero p {
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3vw, 1.3rem);
       margin-bottom: 30px;
+      max-width: 600px;
+      opacity: 0.9;
     }
 
     .hero .btn {
       background: white;
       color: var(--primary);
-      padding: 12px 24px;
-      font-size: 1rem;
-      border-radius: 6px;
+      padding: 15px 30px;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      border-radius: 8px;
       cursor: pointer;
       border: none;
-      transition: 0.3s ease;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .hero .btn:hover {
-      background: var(--light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .categories {
-      padding: 80px 30px;
+      padding: 60px 20px;
       text-align: center;
     }
 
     .categories h2 {
-      font-size: 2.2rem;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
       margin-bottom: 40px;
+      font-weight: 700;
     }
 
     .category-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 30px;
+      gap: 20px;
       max-width: 900px;
       margin: 0 auto;
     }
 
     .category-btn {
-      text-decoration: none; /* <-- Add this line */
-      /* your existing styles below */
-      padding: 40px 20px;
+      text-decoration: none;
+      padding: 30px 20px;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      font-size: 1.1rem;
-      font-weight: 500;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-weight: 600;
       color: var(--dark);
       cursor: pointer;
-      display: block; /* optional: helps make the entire area clickable */
+      display: block;
+      border: 2px solid transparent;
     }
 
     .category-btn:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border-color: var(--primary);
     }
 
     section {
-      padding: 60px 30px;
-      max-width: 900px;
+      padding: clamp(40px, 8vw, 60px) 20px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
-    section h2 {
+    section h1, section h2 {
       text-align: center;
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
       margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    section h3 {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      margin: 25px 0 15px;
+      color: var(--primary);
+    }
+
+    section p {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      line-height: 1.7;
+      margin-bottom: 20px;
     }
 
     .features, .testimonials {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
     }
 
     .feature, .testimonial {
       background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .feature:hover, .testimonial:hover {
+      transform: translateY(-3px);
+    }
+
+    .feature strong {
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      color: var(--primary);
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .testimonial {
+      text-align: center;
+    }
+
+    .testimonial-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary);
+      margin-bottom: 15px;
     }
 
     .testimonial p {
       font-style: italic;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      margin-bottom: 10px;
     }
 
     .suggestion-box {
       background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-top: 20px;
     }
 
     .suggestion-box input, .suggestion-box textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      transition: border-color 0.3s ease;
+    }
+
+    .suggestion-box input:focus, .suggestion-box textarea:focus {
+      outline: none;
+      border-color: var(--primary);
     }
 
     .suggestion-box button {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px 25px;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .suggestion-box button:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
     }
 
     footer {
@@ -197,104 +312,175 @@
       color: white;
       text-align: center;
       padding: 40px 20px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      margin: 10px 0;
     }
 
     footer a {
       color: #ccc;
       margin: 0 10px;
       text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: white;
     }
 
     .social-icons i {
-      font-size: 1.5rem;
-      margin: 0 10px;
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      margin: 0 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .social-icons i:hover {
+      transform: scale(1.2);
     }
 
     .chat-bubble {
-      text-decoration: none; /* <-- Add this line */
       position: fixed;
       bottom: 20px;
       right: 20px;
       background: var(--primary);
       color: white;
-      padding: 10px 15px;
+      padding: 12px 18px;
       border-radius: 50px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       cursor: pointer;
       font-weight: bold;
+      text-decoration: none;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      transition: all 0.3s ease;
+      z-index: 1000;
     }
 
-    @media(max-width: 600px) {
-      .hero h1 {
-        font-size: 2rem;
+    .chat-bubble:hover {
+      transform: scale(1.05);
+      background: var(--secondary);
+    }
+
+    /* Mobile-first responsive design */
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        font-size: 1.3rem;
+      }
+
+      .logo-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+      }
+
+      nav {
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+      }
+
+      .hero {
+        padding: 40px 15px;
+        min-height: 60vh;
+      }
+
+      .categories {
+        padding: 40px 15px;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .category-btn {
+        padding: 25px 20px;
+      }
+
+      section {
+        padding: 30px 15px;
+      }
+
+      .features, .testimonial-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .suggestion-box {
+        padding: 20px;
+      }
+
+      .chat-bubble {
+        bottom: 15px;
+        right: 15px;
+        padding: 10px 15px;
       }
     }
 
-    .testimonials .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      margin-top: 30px;
+    @media (max-width: 480px) {
+      .hero {
+        padding: 30px 10px;
+      }
+
+      section {
+        padding: 25px 10px;
+      }
+
+      .category-btn {
+        padding: 20px 15px;
+      }
+
+      .feature, .testimonial {
+        padding: 20px;
+      }
+
+      .suggestion-box {
+        padding: 15px;
+      }
     }
 
-    .testimonial {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      text-align: center;
-      transition: transform 0.3s ease;
+    /* Ultra-wide screen support */
+    @media (min-width: 1200px) {
+      .hero h1 {
+        font-size: 4rem;
+      }
+
+      .hero p {
+        font-size: 1.4rem;
+      }
+
+      section h1, section h2 {
+        font-size: 2.8rem;
+      }
     }
-
-    .testimonial:hover {
-      transform: translateY(-5px);
-    }
-
-    .testimonial-img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 10px;
-      border: 2px solid var(--primary);
-    }
-.testimonial-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.testimonial {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  text-align: center;
-}
-
-.testimonial-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #4f46e5;
-  margin-bottom: 15px;
-}
-
   </style>
 </head>
 <body>
 
   <header>
-    <div class="logo">Smart Kits Hub</div>
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-tools"></i>
+      </div>
+      <span>Smart Kits Hub</span>
+    </a>
     <nav>
       <a href="#about">About</a>
       <a href="#services">Services</a>
       <a href="#faq">FAQ</a>
       <a href="#privacy">Privacy</a>
     </nav>
-
   </header>
 
   <div class="hero">
@@ -306,12 +492,11 @@
   <div class="categories">
     <h2>Explore by Category</h2>
     <div class="category-grid">
-    <a href="Academic-Tools.html" class="category-btn">📚 Academic Tools</a>
-    <a href="Finance-Tools.html" class="category-btn">💰 Finance Tools</a>
-    <a href="Utility-Tools-Hub.html" class="category-btn">🧠 Daily Utilities</a>
-    <a href="Fun-Personal-Tools.html" class="category-btn">💖 Fun Tools</a>
-  </div>
-
+      <a href="Academic-Tools.html" class="category-btn">📚 Academic Tools</a>
+      <a href="Finance-Tools.html" class="category-btn">💰 Finance Tools</a>
+      <a href="Utility-Tools-Hub.html" class="category-btn">🧠 Daily Utilities</a>
+      <a href="Fun-Personal-Tools.html" class="category-btn">💖 Fun Tools</a>
+    </div>
   </div>
 
   <section id="about">
@@ -336,100 +521,99 @@
   </section>
 
   <section id="services">
-  <h2>Services We Offer</h2>
-  <div class="features">
-    <div class="feature"><strong>🛠️ Custom Tool Development</strong><br/>
-      We build custom tools tailored to your needs — GPA planners, converters, forms, and more. If you have a unique idea, just send it in — we’ll build it for you!
+    <h2>Services We Offer</h2>
+    <div class="features">
+      <div class="feature"><strong>🛠️ Custom Tool Development</strong><br/>
+        We build custom tools tailored to your needs — GPA planners, converters, forms, and more. If you have a unique idea, just send it in — we'll build it for you!
+      </div>
+      <div class="feature"><strong>📘 Student Utilities</strong><br/>
+        From GPA calculators to academic project tools, we support students with smart utilities — even mini or final-year projects.
+      </div>
+      <div class="feature"><strong>🎨 UI/UX Component Design</strong><br/>
+        Need a clean, embeddable template or mini-site for personal or team use? Just reach out — we've got you covered.
+      </div>
+      <div class="feature"><strong>🤝 Project Collaboration</strong><br/>
+        Got an idea for a new tool? Let's team up and bring it to life — we love collaborating on useful innovations.
+      </div>
+      <div class="feature"><strong>🚀 Fast Deployment Support</strong><br/>
+        Want your site or tool live fast? We can help deploy it online — just like this one — within hours.
+      </div>
+      <div class="feature"><strong>📚 Online or Physical Tutoring</strong><br/>
+        Join our beginner-friendly coding cohort and learn to create tools yourself — affordable and beginner-ready.
+      </div>
+      <div class="feature"><strong>📄 CV/Resume Writing Help</strong><br/>
+        Want your resume to stand out? Let's help you craft a strong CV for job and internship applications.
+      </div>
+      <div class="feature"><strong>👕 Logo & T-shirt Design</strong><br/>
+        Need stunning designs for stickers, shirts, or business branding? Send us a message and we'll deliver in style.
+      </div>
+      <div class="feature"><strong>🤖 AI Prompt Crafting</strong><br/>
+        Struggling with writing prompts for AI tools like ChatGPT or Midjourney? We'll help you get the perfect, working prompts.
+      </div>
     </div>
-    <div class="feature"><strong>📘 Student Utilities</strong><br/>
-      From GPA calculators to academic project tools, we support students with smart utilities — even mini or final-year projects.
-    </div>
-    <div class="feature"><strong>🎨 UI/UX Component Design</strong><br/>
-      Need a clean, embeddable template or mini-site for personal or team use? Just reach out — we’ve got you covered.
-    </div>
-    <div class="feature"><strong>🤝 Project Collaboration</strong><br/>
-      Got an idea for a new tool? Let’s team up and bring it to life — we love collaborating on useful innovations.
-    </div>
-    <div class="feature"><strong>🚀 Fast Deployment Support</strong><br/>
-      Want your site or tool live fast? We can help deploy it online — just like this one — within hours.
-    </div>
-    <div class="feature"><strong>📚 Online or Physical Tutoring</strong><br/>
-      Join our beginner-friendly coding cohort and learn to create tools yourself — affordable and beginner-ready.
-    </div>
-    <div class="feature"><strong>📄 CV/Resume Writing Help</strong><br/>
-      Want your resume to stand out? Let’s help you craft a strong CV for job and internship applications.
-    </div>
-    <div class="feature"><strong>👕 Logo & T-shirt Design</strong><br/>
-      Need stunning designs for stickers, shirts, or business branding? Send us a message and we’ll deliver in style.
-    </div>
-    <div class="feature"><strong>🤖 AI Prompt Crafting</strong><br/>
-      Struggling with writing prompts for AI tools like ChatGPT or Midjourney? We’ll help you get the perfect, working prompts.
-    </div>
-  </div>
-</section>
+  </section>
 
   <section>
-  <h2>Core Features</h2>
-  <div class="features">
-    <div class="feature">
-      <strong>🎓 Built for Students & Creatives</strong><br/>
-      Whether you're a student, freelancer, or casual learner, our tools are designed to help you succeed — academically and creatively.
+    <h2>Core Features</h2>
+    <div class="features">
+      <div class="feature">
+        <strong>🎓 Built for Students & Creatives</strong><br/>
+        Whether you're a student, freelancer, or casual learner, our tools are designed to help you succeed — academically and creatively.
+      </div>
+      <div class="feature">
+        <strong>⚡ Super Fast & Easy to Use</strong><br/>
+        Open a tool, tap or input data, and get instant results. No downloads, no delays, no confusion.
+      </div>
+      <div class="feature">
+        <strong>📱 Mobile & Desktop Ready</strong><br/>
+        Works perfectly on any screen — laptop, tablet, or phone — so you can access tools anytime, anywhere.
+      </div>
+      <div class="feature">
+        <strong>🔒 Privacy-First</strong><br/>
+        All tools run in your browser. We don't collect or store your personal data. No sign-ups. No hidden tracking.
+      </div>
+      <div class="feature">
+        <strong>🎨 Fun + Functional</strong><br/>
+        From GPA calculators to mood trackers and love quizzes — we balance productivity with a little bit of fun.
+      </div>
+      <div class="feature">
+        <strong>🛠️ Always Improving</strong><br/>
+        We take feedback seriously. New tools and updates roll out regularly based on what users actually need.
+      </div>
     </div>
-    <div class="feature">
-      <strong>⚡ Super Fast & Easy to Use</strong><br/>
-      Open a tool, tap or input data, and get instant results. No downloads, no delays, no confusion.
-    </div>
-    <div class="feature">
-      <strong>📱 Mobile & Desktop Ready</strong><br/>
-      Works perfectly on any screen — laptop, tablet, or phone — so you can access tools anytime, anywhere.
-    </div>
-    <div class="feature">
-      <strong>🔒 Privacy-First</strong><br/>
-      All tools run in your browser. We don’t collect or store your personal data. No sign-ups. No hidden tracking.
-    </div>
-    <div class="feature">
-      <strong>🎨 Fun + Functional</strong><br/>
-      From GPA calculators to mood trackers and love quizzes — we balance productivity with a little bit of fun.
-    </div>
-    <div class="feature">
-      <strong>🛠️ Always Improving</strong><br/>
-      We take feedback seriously. New tools and updates roll out regularly based on what users actually need.
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="testimonials">
-  <h2>What Users Say</h2>
-  <div class="testimonial-grid">
-    <div class="testimonial">
-      <img src="/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.jpg" alt="Basit" class="testimonial-img" />
-      <p>"This hub saved me from downloading 10 different apps!"</p>
-      <strong>– Basit, Student</strong>
-    </div>
+  <section class="testimonials">
+    <h2>What Users Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <img src="/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.jpg" alt="Basit" class="testimonial-img" />
+        <p>"This hub saved me from downloading 10 different apps!"</p>
+        <strong>– Basit, Student</strong>
+      </div>
 
-    <div class="testimonial">
-      <img src="/minimalist-illustration-of-a-faceless-male-avatar-defoult-photo-placeholder-wearing-a-hoodie-on-a-light-gray-background-ideal-for-profile-pictures-and-online-anonymity-themes-vector.jpg" alt="Soboor" class="testimonial-img" />
-      <p>"The UI is clean and everything works like magic."</p>
-      <strong>– Soboor, Designer</strong>
-    </div>
+      <div class="testimonial">
+        <img src="/minimalist-illustration-of-a-faceless-male-avatar-defoult-photo-placeholder-wearing-a-hoodie-on-a-light-gray-background-ideal-for-profile-pictures-and-online-anonymity-themes-vector.jpg" alt="Soboor" class="testimonial-img" />
+        <p>"The UI is clean and everything works like magic."</p>
+        <strong>– Soboor, Designer</strong>
+      </div>
 
-    <div class="testimonial">
-      <img src="/placeholder-avatar-male-person-default-man-avatar-image-gray-profile-anonymous-face-picture-illustration-isolated-on-white-free-vector.jpg" alt="Mubarak" class="testimonial-img" />
-      <p>"I love the fun tools. The mood tracker is my daily fave."</p>
-      <strong>– Mubarak, Remote Worker</strong>
+      <div class="testimonial">
+        <img src="/placeholder-avatar-male-person-default-man-avatar-image-gray-profile-anonymous-face-picture-illustration-isolated-on-white-free-vector.jpg" alt="Mubarak" class="testimonial-img" />
+        <p>"I love the fun tools. The mood tracker is my daily fave."</p>
+        <strong>– Mubarak, Remote Worker</strong>
+      </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <section>
     <h2>Help Us Improve</h2>
     <div class="suggestion-box">
-     <form action="mailto:iqbalullahj@gmail.com" method="POST" enctype="text/plain">
-      <input type="text" placeholder="Your Name (optional)" name="name">
-      <textarea rows="4" placeholder="Got a suggestion? Tell us what you'd love to see..." name="suggestion"></textarea>
-      <button type="submit">Send Suggestion</button>
-    </form>
+      <form action="mailto:iqbalullahj@gmail.com" method="POST" enctype="text/plain">
+        <input type="text" placeholder="Your Name (optional)" name="name">
+        <textarea rows="4" placeholder="Got a suggestion? Tell us what you'd love to see..." name="suggestion"></textarea>
+        <button type="submit">Send Suggestion</button>
+      </form>
     </div>
   </section>
 
@@ -438,15 +622,13 @@
 
     <p><strong>Q:</strong> Is Smart Kits Hub free?<br/> <strong>A:</strong> Yes! All basic tools are 100% free to use and require no sign-up.</p>
 
-    <p><strong>Q:</strong> Why do you run ads?<br/> <strong>A:</strong>📢 Ads help us keep the tools free and maintain the site. We try to keep them minimal and non-intrusive.</p>
+    <p><strong>Q:</strong> Why do you run ads?<br/> <strong>A:</strong> 📢 Ads help us keep the tools free and maintain the site. We try to keep them minimal and non-intrusive.</p>
     
-    <p><strong>Q:</strong> Is this site free to use?<br/> <strong>A:</strong> Yes! All basic tools are 100% free to use.</p>
-
-    <p><strong>Q:</strong> Do you collect my personal information?<br/> <strong>A:</strong>🛡️ No. All tools work inside your browser. We do not store or track personal data.</p>
+    <p><strong>Q:</strong> Do you collect my personal information?<br/> <strong>A:</strong> 🛡️ No. All tools work inside your browser. We do not store or track personal data.</p>
     
-    <p><strong>Q:</strong>Can I suggest a new tool?<br/> <strong>A:</strong>💡 Absolutely! We would love your ideas. Email us at <strong>iqbalullahj@gmail.com</strong>.</p>
+    <p><strong>Q:</strong> Can I suggest a new tool?<br/> <strong>A:</strong> 💡 Absolutely! We would love your ideas. Email us at <strong>iqbalullahj@gmail.com</strong>.</p>
 
-    <p><strong>Q:</strong> Can I use this on my phone?<br/> <strong>A:</strong>📱 Yes — the site is fully responsive and works on all screen sizes.</p>
+    <p><strong>Q:</strong> Can I use this on my phone?<br/> <strong>A:</strong> 📱 Yes — the site is fully responsive and works on all screen sizes.</p>
   </section>
 
   <section id="privacy">
@@ -465,7 +647,6 @@
     <p>You can manage your cookie preferences through your browser settings.</p>
 
     <p>If you have questions, contact us at: <strong>iqbalullahj@gmail.com</strong></p>
-    <p>We respect your privacy. We do not collect or sell your data. Any tool you use runs directly in your browser.</p>
   </section>
 
   <footer>
@@ -481,7 +662,7 @@
       <a href="#privacy">Privacy</a> |
       <a href="#services">Services</a>
     </p>
-    <p>© 2025 Smart Tools Hub. All rights reserved.</p>
+    <p>© 2025 Smart Kits Hub. All rights reserved.</p>
   </footer>
 
   <a href="https://wa.me/2347065061918" class="chat-bubble" target="_blank">💬 Chat</a>

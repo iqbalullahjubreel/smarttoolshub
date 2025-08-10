@@ -32,80 +32,205 @@
 
   <style>
     body {
-    margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    height: 100vh;
-    overflow: hidden; /* Prevent body scroll */
-    background-color: #f9f9f9;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 220px;
-    height: 100vh; /* full viewport height */
-    background-color: #2c3e50;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    box-sizing: border-box;
-    overflow-y: auto; /* in case sidebar content overflows vertically */
-  }
-
-  .content {
-    margin-left: 220px; /* leave space for fixed sidebar */
-    padding: 40px 50px;
-    background: #fff;
-    height: 100vh;
-    overflow-y: auto; /* only content scrolls */
-    box-shadow: inset 0 0 12px rgba(0,0,0,0.03);
-    box-sizing: border-box;
-    flex-grow: 1;
-  }
-
-
-
-   .sidebar h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f9f9f9;
+      overflow-x: hidden;
     }
 
-  .sidebar button {
-    background: none;
-      border: none;
+    /* Sidebar with icons */
+    .sidebar {
+      width: 80px;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       color: white;
-      text-align: left;
-      padding: 0.8rem 1rem;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 100;
+    }
+
+    /* Logo/Brand at top */
+    .logo {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, #27ae60, #2ecc71);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+    }
+
+    /* Calculator icon buttons */
+    .calc-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 1.8rem;
       cursor: pointer;
-      transition: background 0.3s;
-  }
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
 
-  .sidebar button:hover, .sidebar button:focus {
-    background-color: #4a6fb0;
-    outline: none;
-  }
+    .calc-icon:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px) scale(1.05);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
 
-  
-  .tool {
-    display: none;
-    background: #fff;
-    padding: 30px 35px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    font-size: 1.1rem;
-    line-height: 1.5;
-  }
+    .calc-icon.active {
+      background: linear-gradient(45deg, #27ae60, #2ecc71);
+      box-shadow: 0 5px 20px rgba(39, 174, 96, 0.4);
+    }
 
-  .tool.active {
-    display: block;
-  }
+    /* Tooltip */
+    .calc-icon::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
 
-   .tool-box {
+    .calc-icon:hover::after {
+      opacity: 1;
+    }
+
+    /* Expanded sidebar overlay */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 80px;
+      width: 250px;
+      height: 100%;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      padding: 20px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 99;
+      box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+      overflow-y: auto;
+    }
+
+    .sidebar-overlay.active {
+      transform: translateX(0);
+    }
+
+    .sidebar-overlay h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #27ae60;
+      padding-bottom: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      margin: 8px 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(45deg, #27ae60, #2ecc71);
+    }
+
+    .nav-item span {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+      transition: filter 0.3s ease;
+    }
+
+    .main-content.blurred {
+      filter: blur(2px);
+    }
+
+    /* Toggle button for expanded menu */
+    .menu-toggle {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateX(5px) scale(1.05);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Content styling */
+    .content-box {
+      margin-bottom: 2rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .tool {
+      background: #fff;
+      padding: 30px 35px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .tool-box {
       background: #fff;
       padding: 1.5rem;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
@@ -113,136 +238,218 @@
       border-radius: 8px;
     }
 
-  input, select {
-    padding: 10px 15px;
-    margin: 14px 0;
-    width: 100%;
-    border-radius: 6px;
-    border: 1.5px solid #ccc;
-    font-size: 1rem;
-    font-family: Georgia, serif;
-    transition: border-color 0.3s ease;
-  }
+    input, select {
+      padding: 10px 15px;
+      margin: 14px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: 1.5px solid #ccc;
+      font-size: 1rem;
+      font-family: Georgia, serif;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
 
-  input:focus, select:focus {
-    border-color: #2e4a81;
-    outline: none;
-  }
+    input:focus, select:focus {
+      border-color: #27ae60;
+      outline: none;
+    }
 
-  button {
-    background-color: #2e4a81;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
+    button {
+      background-color: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
 
-  button:hover, button:focus {
-    background-color: #4a6fb0;
-    outline: none;
-  }
+    button:hover, button:focus {
+      background-color: #2ecc71;
+      outline: none;
+    }
 
-  h2 {
-    font-weight: 700;
-    color: white;
-    margin-bottom: 20px;
-  }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
 
-  p {
-    margin-top: 15px;
-    color: #333;
-  }
-  /* Welcome page enhancements */
-  #welcome h1 {
-    font-size: 2.8rem;
-    font-weight: 900;
-    color: #2e4a81;
-    margin-bottom: 15px;
-  }
+    h2 {
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
 
-  #welcome .intro {
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 35px;
-    max-width: 700px;
-    line-height: 1.6;
-  }
+    p {
+      margin-top: 15px;
+      color: #333;
+    }
 
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
-  }
+    /* Welcome page enhancements */
+    .intro {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 35px;
+      max-width: 700px;
+      line-height: 1.6;
+    }
 
-  .feature-card {
-    background: #f0f6ff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 6px 18px rgba(46, 74, 129, 0.15);
-    transition: transform 0.3s ease;
-  }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
 
-  .feature-card h3 {
-    margin-top: 0;
-    color: #2e4a81;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
+    .feature-card {
+      background: #f0f6ff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(39, 174, 96, 0.15);
+      transition: transform 0.3s ease;
+    }
 
-  .feature-card p {
-    color: #444;
-    font-size: 1rem;
-    line-height: 1.4;
-  }
+    .feature-card h3 {
+      margin-top: 0;
+      color: #27ae60;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
 
-  .feature-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 28px rgba(46, 74, 129, 0.25);
-  }
+    .feature-card p {
+      color: #444;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
 
-  .get-started-btn {
-    background-color: #2e4a81;
-    color: #fff;
-    border: none;
-    padding: 14px 32px;
-    font-size: 1.15rem;
-    font-weight: 700;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(46, 74, 129, 0.4);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(39, 174, 96, 0.25);
+    }
 
-  .get-started-btn:hover, .get-started-btn:focus {
-    background-color: #4a6fb0;
-    box-shadow: 0 10px 25px rgba(46, 74, 129, 0.6);
-    outline: none;
-  }
+    .get-started-btn {
+      background-color: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-</style>
+    .get-started-btn:hover, .get-started-btn:focus {
+      background-color: #2ecc71;
+      box-shadow: 0 10px 25px rgba(39, 174, 96, 0.6);
+      outline: none;
+    }
+
+    /* Backdrop */
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 98;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 70px;
+        padding: 15px 5px;
+      }
+
+      .calc-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+      }
+
+      .logo {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+      
+      #welcome h1 {
+        font-size: 2.2rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+
+  </style>
 
 </head>
 <body>
+
+  <!-- Sidebar with finance icons -->
   <div class="sidebar">
-    <h2>Finance Tools</h2>
-    <button onclick="showTool('welcome')">🏠 Welcome</button>
-    <button onclick="showTool('currency')">💱 Currency Converter</button>
-    <button onclick="showTool('loan')">💰 Loan Calculator</button>
-    <button onclick="showTool('tax')">📊 Tax Estimator</button>
-    <button onclick="showTool('budget')">📒 Budget Planner</button>
-    <button onclick="showTool('savings')">🏦 Savings Tracker</button>
-    <button onclick="showTool('tip')">💸 Tip Calculator</button>
-    <button onclick="showTool('discount')">🛍️ Discount Calculator</button>
-    <button onclick="showTool('investment')">📈 Investment ROI</button>
+    <!-- Logo/Brand -->
+    <div class="logo">💰</div>
+    
+    <!-- Menu toggle for expanded view -->
+    <button class="menu-toggle" onclick="toggleExpanded()">≡</button>
+    
+    <!-- Finance Tool Icons -->
+    <button class="calc-icon active" data-tooltip="Welcome" onclick="showContent('welcome')">🏠</button>
+    <button class="calc-icon" data-tooltip="Currency Converter" onclick="showContent('currency')">💱</button>
+    <button class="calc-icon" data-tooltip="Loan Calculator" onclick="showContent('loan')">💰</button>
+    <button class="calc-icon" data-tooltip="Tax Estimator" onclick="showContent('tax')">📊</button>
+    <button class="calc-icon" data-tooltip="Budget Planner" onclick="showContent('budget')">📒</button>
+    <button class="calc-icon" data-tooltip="Savings Tracker" onclick="showContent('savings')">🏦</button>
+    <button class="calc-icon" data-tooltip="Tip Calculator" onclick="showContent('tip')">💸</button>
+    <button class="calc-icon" data-tooltip="Discount Calculator" onclick="showContent('discount')">🛍️</button>
+    <button class="calc-icon" data-tooltip="Investment ROI" onclick="showContent('investment')">📈</button>
   </div>
 
-  <div class="content">
-    <div id="welcome" class="tool active">
+  <!-- Expanded sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay">
+    <h2>Finance Tools</h2>
+    <div class="nav-item active" onclick="showContent('welcome')">🏠 <span>Welcome</span></div>
+    <div class="nav-item" onclick="showContent('currency')">💱 <span>Currency Converter</span></div>
+    <div class="nav-item" onclick="showContent('loan')">💰 <span>Loan Calculator</span></div>
+    <div class="nav-item" onclick="showContent('tax')">📊 <span>Tax Estimator</span></div>
+    <div class="nav-item" onclick="showContent('budget')">📒 <span>Budget Planner</span></div>
+    <div class="nav-item" onclick="showContent('savings')">🏦 <span>Savings Tracker</span></div>
+    <div class="nav-item" onclick="showContent('tip')">💸 <span>Tip Calculator</span></div>
+    <div class="nav-item" onclick="showContent('discount')">🛍️ <span>Discount Calculator</span></div>
+    <div class="nav-item" onclick="showContent('investment')">📈 <span>Investment ROI</span></div>
+  </div>
+
+  <!-- Backdrop -->
+  <div class="backdrop" id="backdrop" onclick="closeExpanded()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+
+    <!-- Welcome Page -->
+    <div id="welcome" class="content-box">
       <h1>Welcome to Finance Tools</h1>
       <p class="intro">
         Empower your financial decisions with a suite of easy-to-use calculators and planners designed to help you manage money smarter and achieve your goals faster.
@@ -267,102 +474,175 @@
         </div>
       </div>
 
-      <button onclick="showTool('currency')" class="get-started-btn">Get Started →</button>
+      <button onclick="showContent('currency')" class="get-started-btn">Get Started →</button>
     </div>
 
-
-    <div id="currency" class="tool">
-      <h2>Currency Converter</h2>
-      <input type="number" id="amount" placeholder="Enter amount" />
-      <select id="fromCurrency"></select>
-      <select id="toCurrency"></select>
-      <button onclick="convertCurrency()">Convert</button>
-      <p id="result"></p>
+    <!-- Currency Converter -->
+    <div id="currency" class="content-box hidden">
+      <div class="tool">
+        <h2>💱 Currency Converter</h2>
+        <input type="number" id="amount" placeholder="Enter amount" />
+        <select id="fromCurrency"></select>
+        <select id="toCurrency"></select>
+        <button onclick="convertCurrency()">Convert</button>
+        <p id="result"></p>
+      </div>
     </div>
 
-    <div id="loan" class="tool">
-      <h2>Loan Calculator</h2>
-      <input type="number" id="loanAmount" placeholder="Loan Amount" />
-      <input type="number" id="interestRate" placeholder="Annual Interest Rate (%)" />
-      <input type="number" id="loanTerm" placeholder="Loan Term (years)" />
-      <button onclick="calculateLoan()">Calculate</button>
-      <p id="loanResult"></p>
+    <!-- Loan Calculator -->
+    <div id="loan" class="content-box hidden">
+      <div class="tool">
+        <h2>💰 Loan Calculator</h2>
+        <input type="number" id="loanAmount" placeholder="Loan Amount" />
+        <input type="number" id="interestRate" placeholder="Annual Interest Rate (%)" />
+        <input type="number" id="loanTerm" placeholder="Loan Term (years)" />
+        <button onclick="calculateLoan()">Calculate</button>
+        <p id="loanResult"></p>
+      </div>
     </div>
 
-    <div id="tax" class="tool">
-      <h2>Tax Estimator</h2>
-      <input type="number" id="income" placeholder="Enter your income" />
-      <button onclick="estimateTax()">Estimate Tax</button>
-      <p id="taxResult"></p>
+    <!-- Tax Estimator -->
+    <div id="tax" class="content-box hidden">
+      <div class="tool">
+        <h2>📊 Tax Estimator</h2>
+        <input type="number" id="income" placeholder="Enter your income" />
+        <button onclick="estimateTax()">Estimate Tax</button>
+        <p id="taxResult"></p>
+      </div>
     </div>
 
-    <div id="budget" class="tool">
-      <h2>Budget Planner</h2>
-      <input type="number" id="incomeBudget" placeholder="Total Income" />
-      <input type="number" id="expenses" placeholder="Total Expenses" />
-      <button onclick="calculateBudget()">Plan</button>
-      <p id="budgetResult"></p>
+    <!-- Budget Planner -->
+    <div id="budget" class="content-box hidden">
+      <div class="tool">
+        <h2>📒 Budget Planner</h2>
+        <input type="number" id="incomeBudget" placeholder="Total Income" />
+        <input type="number" id="expenses" placeholder="Total Expenses" />
+        <button onclick="calculateBudget()">Plan</button>
+        <p id="budgetResult"></p>
+      </div>
     </div>
 
-    <div id="savings" class="tool">
-      <h2>Savings Tracker</h2>
-      <input type="number" id="goalAmount" placeholder="Savings Goal" />
-      <input type="number" id="currentAmount" placeholder="Current Savings" />
-      <button onclick="trackSavings()">Track</button>
-      <p id="savingsResult"></p>
+    <!-- Savings Tracker -->
+    <div id="savings" class="content-box hidden">
+      <div class="tool">
+        <h2>🏦 Savings Tracker</h2>
+        <input type="number" id="goalAmount" placeholder="Savings Goal" />
+        <input type="number" id="currentAmount" placeholder="Current Savings" />
+        <button onclick="trackSavings()">Track</button>
+        <p id="savingsResult"></p>
+      </div>
     </div>
 
-    <div id="tip" class="tool">
-      <h2>Tip Calculator</h2>
-      <input type="number" id="billAmount" placeholder="Bill Amount" />
-      <input type="number" id="tipPercent" placeholder="Tip Percentage" />
-      <button onclick="calculateTip()">Calculate Tip</button>
-      <p id="tipResult"></p>
+    <!-- Tip Calculator -->
+    <div id="tip" class="content-box hidden">
+      <div class="tool">
+        <h2>💸 Tip Calculator</h2>
+        <input type="number" id="billAmount" placeholder="Bill Amount" />
+        <input type="number" id="tipPercent" placeholder="Tip Percentage" />
+        <button onclick="calculateTip()">Calculate Tip</button>
+        <p id="tipResult"></p>
+      </div>
     </div>
 
-    <div id="discount" class="tool">
-      <h2>Discount Calculator</h2>
-      <input type="number" id="originalPrice" placeholder="Original Price" />
-      <input type="number" id="discountPercent" placeholder="Discount (%)" />
-      <button onclick="calculateDiscount()">Calculate Discount</button>
-      <p id="discountResult"></p>
+    <!-- Discount Calculator -->
+    <div id="discount" class="content-box hidden">
+      <div class="tool">
+        <h2>🛍️ Discount Calculator</h2>
+        <input type="number" id="originalPrice" placeholder="Original Price" />
+        <input type="number" id="discountPercent" placeholder="Discount (%)" />
+        <button onclick="calculateDiscount()">Calculate Discount</button>
+        <p id="discountResult"></p>
+      </div>
     </div>
 
-    <div id="investment" class="tool">
-      <h2>Investment ROI Calculator</h2>
-      <input type="number" id="initial" placeholder="Initial Investment ($)" />
-      <input type="number" id="final" placeholder="Final Value ($)" />
-      <button onclick="calculateROI()">Calculate</button>
-      <p id="roiResult"></p>
+    <!-- Investment ROI Calculator -->
+    <div id="investment" class="content-box hidden">
+      <div class="tool">
+        <h2>📈 Investment ROI Calculator</h2>
+        <input type="number" id="initial" placeholder="Initial Investment ($)" />
+        <input type="number" id="final" placeholder="Final Value ($)" />
+        <button onclick="calculateROI()">Calculate</button>
+        <p id="roiResult"></p>
+      </div>
     </div>
   </div>
 
   <script>
-    const tools = document.querySelectorAll(".tool");
+    let currentActiveNav = 'welcome';
 
-    function showTool(id) {
-      tools.forEach((tool) => {
-        tool.classList.remove("active");
+    function showContent(id) {
+      // Hide all content boxes
+      const boxes = document.querySelectorAll('.content-box');
+      boxes.forEach(box => box.classList.add('hidden'));
+      
+      // Show selected content
+      document.getElementById(id).classList.remove('hidden');
+      
+      // Update active calc-icon
+      const calcIcons = document.querySelectorAll('.calc-icon');
+      calcIcons.forEach(icon => icon.classList.remove('active'));
+      
+      // Update active nav-item
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => item.classList.remove('active'));
+      
+      // Find and activate the correct buttons
+      calcIcons.forEach(icon => {
+        if (icon.onclick.toString().includes(`'${id}'`)) {
+          icon.classList.add('active');
+        }
       });
-      document.getElementById(id).classList.add("active");
+      
+      navItems.forEach(item => {
+        if (item.onclick.toString().includes(`'${id}'`)) {
+          item.classList.add('active');
+        }
+      });
+      
+      currentActiveNav = id;
+      closeExpanded(); // Close expanded menu after selection
+    }
+
+    function toggleExpanded() {
+      const overlay = document.getElementById('sidebarOverlay');
+      const backdrop = document.getElementById('backdrop');
+      const mainContent = document.getElementById('mainContent');
+      
+      overlay.classList.toggle('active');
+      backdrop.classList.toggle('active');
+      mainContent.classList.toggle('blurred');
+    }
+
+    function closeExpanded() {
+      const overlay = document.getElementById('sidebarOverlay');
+      const backdrop = document.getElementById('backdrop');
+      const mainContent = document.getElementById('mainContent');
+      
+      overlay.classList.remove('active');
+      backdrop.classList.remove('active');
+      mainContent.classList.remove('blurred');
     }
 
     async function populateCurrencies() {
-      const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
-      const data = await res.json();
-      const from = document.getElementById("fromCurrency");
-      const to = document.getElementById("toCurrency");
+      try {
+        const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+        const data = await res.json();
+        const from = document.getElementById("fromCurrency");
+        const to = document.getElementById("toCurrency");
 
-      for (let currency in data.rates) {
-        const option1 = document.createElement("option");
-        option1.value = currency;
-        option1.textContent = currency;
-        from.appendChild(option1);
+        for (let currency in data.rates) {
+          const option1 = document.createElement("option");
+          option1.value = currency;
+          option1.textContent = currency;
+          from.appendChild(option1);
 
-        const option2 = document.createElement("option");
-        option2.value = currency;
-        option2.textContent = currency;
-        to.appendChild(option2);
+          const option2 = document.createElement("option");
+          option2.value = currency;
+          option2.textContent = currency;
+          to.appendChild(option2);
+        }
+      } catch (error) {
+        console.error("Failed to load currencies:", error);
       }
     }
 
@@ -371,12 +651,20 @@
       const from = document.getElementById("fromCurrency").value;
       const to = document.getElementById("toCurrency").value;
 
+      if (!amount || !from || !to) {
+        document.getElementById("result").textContent = "Please fill all fields";
+        return;
+      }
+
       fetch(`https://api.exchangerate-api.com/v4/latest/${from}`)
         .then(res => res.json())
         .then(data => {
           const rate = data.rates[to];
           const result = amount * rate;
           document.getElementById("result").textContent = `${amount} ${from} = ${result.toFixed(2)} ${to}`;
+        })
+        .catch(error => {
+          document.getElementById("result").textContent = "Error converting currency";
         });
     }
 
@@ -384,6 +672,12 @@
       const principal = parseFloat(document.getElementById("loanAmount").value);
       const annualRate = parseFloat(document.getElementById("interestRate").value) / 100;
       const years = parseFloat(document.getElementById("loanTerm").value);
+      
+      if (isNaN(principal) || isNaN(annualRate) || isNaN(years)) {
+        document.getElementById("loanResult").textContent = "Please enter valid numbers";
+        return;
+      }
+      
       const monthlyRate = annualRate / 12;
       const payments = years * 12;
       const monthly = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -payments));
@@ -392,6 +686,10 @@
 
     function estimateTax() {
       const income = parseFloat(document.getElementById("income").value);
+      if (isNaN(income)) {
+        document.getElementById("taxResult").textContent = "Please enter valid income";
+        return;
+      }
       const tax = income * 0.15;
       document.getElementById("taxResult").textContent = `Estimated Tax: $${tax.toFixed(2)}`;
     }
@@ -399,6 +697,12 @@
     function calculateBudget() {
       const income = parseFloat(document.getElementById("incomeBudget").value);
       const expenses = parseFloat(document.getElementById("expenses").value);
+      
+      if (isNaN(income) || isNaN(expenses)) {
+        document.getElementById("budgetResult").textContent = "Please enter valid numbers";
+        return;
+      }
+      
       const balance = income - expenses;
       document.getElementById("budgetResult").textContent = `Remaining Budget: $${balance.toFixed(2)}`;
     }
@@ -406,20 +710,40 @@
     function trackSavings() {
       const goal = parseFloat(document.getElementById("goalAmount").value);
       const current = parseFloat(document.getElementById("currentAmount").value);
+      
+      if (isNaN(goal) || isNaN(current)) {
+        document.getElementById("savingsResult").textContent = "Please enter valid numbers";
+        return;
+      }
+      
       const remaining = goal - current;
-      document.getElementById("savingsResult").textContent = `You need $${remaining.toFixed(2)} more to reach your goal.`;
+      const percentage = (current / goal * 100).toFixed(1);
+      document.getElementById("savingsResult").textContent = `You need $${remaining.toFixed(2)} more to reach your goal (${percentage}% complete)`;
     }
 
     function calculateTip() {
       const bill = parseFloat(document.getElementById("billAmount").value);
       const tip = parseFloat(document.getElementById("tipPercent").value);
+      
+      if (isNaN(bill) || isNaN(tip)) {
+        document.getElementById("tipResult").textContent = "Please enter valid numbers";
+        return;
+      }
+      
       const totalTip = bill * (tip / 100);
-      document.getElementById("tipResult").textContent = `Tip Amount: $${totalTip.toFixed(2)}`;
+      const total = bill + totalTip;
+      document.getElementById("tipResult").textContent = `Tip: $${totalTip.toFixed(2)} | Total: $${total.toFixed(2)}`;
     }
 
     function calculateDiscount() {
       const price = parseFloat(document.getElementById("originalPrice").value);
       const discount = parseFloat(document.getElementById("discountPercent").value);
+      
+      if (isNaN(price) || isNaN(discount)) {
+        document.getElementById("discountResult").textContent = "Please enter valid numbers";
+        return;
+      }
+      
       const savings = price * (discount / 100);
       const finalPrice = price - savings;
       document.getElementById("discountResult").textContent = `Final Price: $${finalPrice.toFixed(2)} (You save $${savings.toFixed(2)})`;
@@ -428,11 +752,30 @@
     function calculateROI() {
       const initial = parseFloat(document.getElementById("initial").value);
       const final = parseFloat(document.getElementById("final").value);
+      
+      if (isNaN(initial) || isNaN(final) || initial === 0) {
+        document.getElementById("roiResult").textContent = "Please enter valid numbers";
+        return;
+      }
+      
       const roi = ((final - initial) / initial) * 100;
-      document.getElementById("roiResult").textContent = isFinite(roi) ? `ROI: ${roi.toFixed(2)}%` : "Invalid input";
+      document.getElementById("roiResult").textContent = `ROI: ${roi.toFixed(2)}%`;
     }
 
-    populateCurrencies();
+    // Initialize the app
+    function initializeApp() {
+      populateCurrencies();
+      showContent('welcome');
+    }
+
+    // Close expanded sidebar with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeExpanded();
+      }
+    });
+
+    initializeApp();
   </script>
 
   <!-- Google Adsense Code Script-->

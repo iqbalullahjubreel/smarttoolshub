@@ -28,54 +28,199 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
-    /* Utilities Hub theme applied */
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       height: 100vh;
-      background: #f9f9f9;
-      color: #2c3e50;
+      background-color: #f9f9f9;
+      overflow-x: hidden;
     }
+
+    /* Sidebar with icons */
     .sidebar {
-      width: 220px;
-      background: #2c3e50;
+      width: 80px;
+      background: linear-gradient(135deg, #e91e63, #9c27b0);
       color: white;
       display: flex;
       flex-direction: column;
-      padding: 1rem;
+      align-items: center;
+      padding: 20px 10px;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 100;
     }
-    .sidebar h2 {
+
+    /* Logo/Brand at top */
+    .logo {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
     }
-    .tool-btn {
-      background: none;
+
+    /* Tool icon buttons */
+    .tool-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.1);
       border: none;
+      border-radius: 15px;
       color: white;
-      text-align: left;
-      padding: 0.8rem 1rem;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
+      font-size: 1.8rem;
       cursor: pointer;
-      transition: background 0.3s;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      backdrop-filter: blur(10px);
     }
-    .tool-btn:hover, .tool-btn.active {
-      background: #34495e;
+
+    .tool-icon:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px) scale(1.05);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
     }
-    main#mainContent {
-      flex: 1;
-      padding: 2rem;
+
+    .tool-icon.active {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    /* Tooltip */
+    .tool-icon::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .tool-icon:hover::after {
+      opacity: 1;
+    }
+
+    /* Expanded sidebar overlay */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 80px;
+      width: 280px;
+      height: 100%;
+      background: linear-gradient(135deg, #e91e63, #9c27b0);
+      color: white;
+      padding: 20px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 99;
+      box-shadow: 2px 0 20px rgba(0,0,0,0.2);
       overflow-y: auto;
-      background: white;
     }
+
+    .sidebar-overlay.active {
+      transform: translateX(0);
+    }
+
+    .sidebar-overlay h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ff6b6b;
+      padding-bottom: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      margin: 8px 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    }
+
+    .nav-item span {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+      transition: filter 0.3s ease;
+    }
+
+    .main-content.blurred {
+      filter: blur(2px);
+    }
+
+    /* Toggle button for expanded menu */
+    .menu-toggle {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateX(5px) scale(1.05);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Content styling */
+    .hidden {
+      display: none;
+    }
+
     .tool-card {
       background: #ffffff;
-      border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
       max-width: 600px;
       margin: auto;
+      border: 1px solid #eee;
     }
     .tool-card h1 {
       font-size: 1.8rem;
@@ -102,7 +247,7 @@
       width: 100%;
       padding: 1rem;
       font-size: 1rem;
-      background: #3498db;
+      background: #e91e63;
       color: white;
       border: none;
       border-radius: 6px;
@@ -110,7 +255,7 @@
       transition: background 0.3s;
     }
     .tool-card button:hover {
-      background: #2980b9;
+      background: #c2185b;
     }
     .tool-result {
       margin-top: 1rem;
@@ -123,518 +268,729 @@
       padding: 0.8rem 1rem;
       border: none;
       border-radius: 6px;
-      background: #3498db;
+      background: #e91e63;
       color: white;
       font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s;
     }
     .option-btn:hover:not(:disabled) {
-      background: #2980b9;
+      background: #c2185b;
     }
     .option-btn:disabled {
       opacity: 0.6;
       cursor: default;
     }
     .tool-result pre {
-  background: #f4f0ff;
-  border: 2px solid purple;
-  padding: 12px;
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  color: #3a0ca3;
-}
+      background: #f4f0ff;
+      border: 2px solid purple;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: #3a0ca3;
+    }
 
-.share-buttons {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+    .share-buttons {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-.share-buttons button {
-  padding: 6px 12px;
-  background: #6a00ff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.2s ease-in-out;
-}
+    .share-buttons button {
+      padding: 6px 12px;
+      background: #6a00ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s ease-in-out;
+    }
 
-.share-buttons button:hover {
-  background: #480ca8;
-}
+    .share-buttons button:hover {
+      background: #480ca8;
+    }
 
- .loader-center {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #3498db;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin: 40px auto;
-}
+    .loader-center {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #e91e63;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 40px auto;
+    }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Backdrop */
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 98;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Tool boxes for welcome page */
+    .tool-box {
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+      margin-bottom: 20px;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tool-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .tool-title {
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 70px;
+        padding: 15px 5px;
+      }
+
+      .tool-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+      }
+
+      .logo {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .sidebar-overlay {
+        width: 250px;
+      }
+    }
 
   </style>
 </head>
 <body>
+
+  <!-- Sidebar with tool icons -->
   <div class="sidebar">
-    <h2>Fun & Personal Tools</h2>
-    <button class="tool-btn active" data-tool="welcome">✨ Welcome</button>
-    <button class="tool-btn" data-tool="ageCalculator">Age Calculator</button>
-    <button class="tool-btn" data-tool="birthdayCountdown">Birthday Countdown</button>
-    <button class="tool-btn" data-tool="randomJoke">Random Joke Generator</button>
-    <button class="tool-btn" data-tool="loveCalculator">Love Calculator</button>
-    <button class="tool-btn" data-tool="mindQuiz">Mind Quiz / Riddles</button>
-    <button class="tool-btn" data-tool="moodTracker">Mood Tracker</button>
-    <button class="tool-btn" data-tool="nameCompatibility">Name Compatibility Test</button>
-    <button class="tool-btn" data-tool="zodiacSignFinder">Zodiac Sign calculator</button>
+    <!-- Logo/Brand -->
+    <div class="logo">🎉</div>
+    
+    <!-- Menu toggle for expanded view -->
+    <button class="menu-toggle" onclick="toggleExpanded()">≡</button>
+    
+    <!-- Tool Icons -->
+    <button class="tool-icon active" data-tooltip="Welcome" onclick="showContent('welcome')">✨</button>
+    <button class="tool-icon" data-tooltip="Age Calculator" onclick="showContent('ageCalculator')">🎂</button>
+    <button class="tool-icon" data-tooltip="Birthday Countdown" onclick="showContent('birthdayCountdown')">🎉</button>
+    <button class="tool-icon" data-tooltip="Random Jokes" onclick="showContent('randomJoke')">😂</button>
+    <button class="tool-icon" data-tooltip="Love Calculator" onclick="showContent('loveCalculator')">❤️</button>
+    <button class="tool-icon" data-tooltip="Mind Quiz" onclick="showContent('mindQuiz')">🧠</button>
+    <button class="tool-icon" data-tooltip="Mood Tracker" onclick="showContent('moodTracker')">😊</button>
+    <button class="tool-icon" data-tooltip="Name Compatibility" onclick="showContent('nameCompatibility')">💘</button>
+    <button class="tool-icon" data-tooltip="Zodiac Signs" onclick="showContent('zodiacSignFinder')">♈</button>
   </div>
 
-  <main id="mainContent"></main>
+  <!-- Expanded sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay">
+    <h2>Fun & Personal Tools</h2>
+    <div class="nav-item active" onclick="showContent('welcome')">✨ <span>Welcome</span></div>
+    <div class="nav-item" onclick="showContent('ageCalculator')">🎂 <span>Age Calculator</span></div>
+    <div class="nav-item" onclick="showContent('birthdayCountdown')">🎉 <span>Birthday Countdown</span></div>
+    <div class="nav-item" onclick="showContent('randomJoke')">😂 <span>Random Jokes</span></div>
+    <div class="nav-item" onclick="showContent('loveCalculator')">❤️ <span>Love Calculator</span></div>
+    <div class="nav-item" onclick="showContent('mindQuiz')">🧠 <span>Mind Quiz</span></div>
+    <div class="nav-item" onclick="showContent('moodTracker')">😊 <span>Mood Tracker</span></div>
+    <div class="nav-item" onclick="showContent('nameCompatibility')">💘 <span>Name Compatibility</span></div>
+    <div class="nav-item" onclick="showContent('zodiacSignFinder')">♈ <span>Zodiac Signs</span></div>
+  </div>
 
-  <script>
-    const mainContent = document.getElementById('mainContent');
-    const buttons = document.querySelectorAll('.tool-btn');
+  <!-- Backdrop -->
+  <div class="backdrop" id="backdrop" onclick="closeExpanded()"></div>
 
-    function setActive(btn) {
-      buttons.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-    buttons.forEach(btn=>btn.addEventListener('click', ()=>{
-      setActive(btn); loadTool(btn.getAttribute('data-tool'));
-    }));
-    window.addEventListener('DOMContentLoaded', ()=> loadTool('welcome'));
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
 
-    function loadTool(toolKey) {
-      mainContent.innerHTML = '';
-      // Welcome
-       if (toolKey === 'welcome') {
-  mainContent.innerHTML = `
-    <div id="welcome" style="font-family: 'Segoe UI', sans-serif; padding: 20px;">
-      <h1 style="font-size: 28px; color: #6a0dad; text-align: center;">Welcome to Your Fun & Personal Tools Hub 🎉</h1>
-      <p style="font-size: 16px; text-align: center; color: #444; max-width: 600px; margin: 10px auto;">
-        Need a laugh? Want to know your zodiac, check name compatibility, track your mood, or calculate your age? You’re in the right place! Tap any tool on the left to get started. Here’s what you’ll find inside:
+    <!-- Welcome Page -->
+    <div id="welcome" class="content-box">
+      <h1>Welcome to Your Fun & Personal Tools Hub 🎉</h1>
+      <p style="font-size: 16px; text-align: center; color: #444; max-width: 600px; margin: 10px auto 30px;">
+        Need a laugh? Want to know your zodiac, check name compatibility, track your mood, or calculate your age? You're in the right place! Use the sidebar to explore all our amazing tools.
       </p>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px;">
-
-        <div style="background:#f9f9f9; border-radius:12px; padding:16px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <h3 style="color:#6a0dad;">🎯 Age Calculator</h3>
-          <p>Enter your date of birth and find out your exact age — with a fun twist! Get a message based on your stage of life.</p>
-        </div>
-
-        <div style="background:#f9f9f9; border-radius:12px; padding:16px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <h3 style="color:#e91e63;">❤️ Love Calculator</h3>
-          <p>Put two names together, cancel out the common letters, and find your FLAMES relationship match — plus personalized love advice!</p>
-        </div>
-
-        <div style="background:#f9f9f9; border-radius:12px; padding:16px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <h3 style="color:#ff9800;">😂 Random Joke Generator</h3>
-          <p>Need a mood boost? Click to generate 5 jokes one after the other — complete with animation and punchline delays.</p>
-        </div>
-
-        <div style="background:#f9f9f9; border-radius:12px; padding:16px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <h3 style="color:#03a9f4;">🌟 Zodiac Sign Finder</h3>
-          <p>Select your birthdate to discover your zodiac sign, a color-coded card, and surprising truths about your personality.</p>
-        </div>
-
-        <div style="background:#f9f9f9; border-radius:12px; padding:16px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <h3 style="color:#8bc34a;">📅 Mood Tracker</h3>
-          <p>Track your mood daily, add reasons, edit later, and get weekly analysis + emotional advice for a better new week.</p>
-        </div>
-
-        <div style="background:#f9f9f9; border-radius:12px; padding:16px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <h3 style="color:#9c27b0;">💞 Name Compatibility</h3>
-          <p>Check how much your names match based on letter patterns and get a sweet, funny message you can download or share!</p>
-        </div>
-
+      <div class="tool-box">
+        <h2 class="tool-title">🎯 Age Calculator</h2>
+        <p>Enter your date of birth and find out your exact age — with a fun twist! Get a personalized message based on your stage of life, from tiny legend to living legend.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Age calculation illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
       </div>
 
-      <img src="https://cdn-icons-png.flaticon.com/512/888/888879.png" alt="Fun tools illustration"
-        style="width: 100%; max-width: 320px; margin: 40px auto 0; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1)); border-radius: 12px;" />
+      <div class="tool-box">
+        <h2 class="tool-title">❤️ Love Calculator</h2>
+        <p>Put two names together, cancel out the common letters, and find your FLAMES relationship match — plus personalized love advice and shareable cards!</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="Love and hearts illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
+
+      <div class="tool-box">
+        <h2 class="tool-title">😂 Random Joke Generator</h2>
+        <p>Need a mood boost? Click to generate 5 jokes one after the other — complete with animation and punchline delays to keep you entertained.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/2584/2584606.png" alt="Laughing and comedy illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
+
+      <div class="tool-box">
+        <h2 class="tool-title">🌟 Zodiac Sign Finder</h2>
+        <p>Select your birthdate to discover your zodiac sign, get a beautiful color-coded card, and learn surprising truths about your personality.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="Zodiac and astrology illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
+
+      <div class="tool-box">
+        <h2 class="tool-title">📅 Mood Tracker</h2>
+        <p>Track your mood daily, add reasons, edit later, and get weekly analysis plus emotional advice for a better week ahead.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055646.png" alt="Mood and emotions illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
+
+      <div class="tool-box">
+        <h2 class="tool-title">💞 Name Compatibility</h2>
+        <p>Check how much your names match based on letter patterns and get sweet, funny messages you can download or share with someone special!</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/3688/3688599.png" alt="Compatibility and connection illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
+
+      <div class="tool-box">
+        <h2 class="tool-title">🧠 Mind Quiz / Riddles</h2>
+        <p>Challenge your brain with fun riddles and mind-bending questions. Test your logic and problem-solving skills with our interactive quiz.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/3588/3588435.png" alt="Brain and thinking illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
+
+      <div class="tool-box">
+        <h2 class="tool-title">🎉 Birthday Countdown</h2>
+        <p>Create personalized birthday countdown cards with your name and share them with friends. Count down the days until your special day!</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" alt="Birthday and celebration illustration" style="width: 80px; height: 80px; margin: 10px auto; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));" />
+      </div>
 
       <p style="text-align:center; font-size:14px; color:#888; margin-top:15px;">All tools are just for fun, creativity & smiles 😄</p>
     </div>
-  `;
-}
 
-      else if (toolKey === 'ageCalculator') {
-  mainContent.innerHTML = `
-    <div class="tool-card">
-      <h1>Age Calculator 🎂</h1>
-      <label for="dob">Select your date of birth:</label>
-      <input type="date" id="dob" />
-      <button id="calcAgeBtn">Calculate Age</button>
-      <div id="result" class="tool-result" style="margin-top:15px;"></div>
-    </div>
-  `;
-
-  document.getElementById('calcAgeBtn').onclick = () => {
-    const dob = document.getElementById('dob').value;
-    const result = document.getElementById('result');
-
-    if (!dob) {
-      result.textContent = "📅 Please select your date of birth.";
-      return;
-    }
-
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    // Age classification
-    let message = "";
-    if (age < 1) {
-      message = "👶 You're just a tiny legend. Enjoy your milk!";
-    } else if (age >= 1 && age <= 3) {
-      message = `🍼 You're ${age}! Probably in playgroup... or chewing your toys.`;
-    } else if (age >= 4 && age <= 6) {
-      message = `🎒 You're ${age}! Probably in Nursery or KG. Colors and crayons rule your world!`;
-    } else if (age >= 7 && age <= 11) {
-      message = `📚 You're ${age}! That sounds like Primary School. Homework, cartoons, and snacks!`;
-    } else if (age >= 12 && age <= 14) {
-      message = `🧠 You're ${age}. Welcome to JSS life — mood swings and math trauma unlocked.`;
-    } else if (age >= 15 && age <= 17) {
-      message = `📖 You're ${age}, likely in Senior Secondary. WAEC loading... No pressure 😉.`;
-    } else if (age >= 18 && age <= 22) {
-      message = `🎓 You're ${age}. University or fresh adulthood. Vibes + strikes + ramen noodles!`;
-    } else if (age >= 23 && age <= 30) {
-      message = `💼 You're ${age}. Probably working hard, paying bills, and pretending to be fine.`;
-    } else if (age >= 31 && age <= 45) {
-      message = `👨‍👩‍👧 You're ${age}. Possibly a parent, bossing someone or being bossed!`;
-    } else if (age >= 46 && age <= 60) {
-      message = `🧓 You're ${age}. OG level unlocked. You’ve seen it all! Enjoy your wisdom.`;
-    } else if (age > 60) {
-      message = `🎉 You're ${age}. A living legend! Probably telling stories that begin with "Back in my day..."`;
-    } else {
-      message = "Hmm... something feels off with the date you picked.";
-    }
-
-    result.innerHTML = `<strong>You are ${age} year${age !== 1 ? "s" : ""} old.</strong><br/><p style="margin-top:10px;">${message}</p>`;
-  };
-}
-
-  else if (toolKey === 'birthdayCountdown') {
-  mainContent.innerHTML = `
-    <div class="tool-card">
-      <h1>Birthday Countdown 🎉</h1>
-
-      <label for="name">Your Name:</label>
-      <input type="text" id="name" placeholder="e.g. Bola" />
-
-      <label for="birthdate">Your Birthday:</label>
-      <input type="date" id="birthdate" />
-
-      <button id="countdownBtn">Generate Card</button>
-
-      <div id="countdownCard" style="margin-top:20px;"></div>
-
-      <button id="shareCardBtn" style="display:none; margin-top:10px;">📤 Share / Download Card</button>
-      <p id="shareHint" style="display:none; font-size:0.9em; color:gray; margin-top:8px;">
-        If share doesn't work, the card will be downloaded instead. You can then send it via WhatsApp, IG, etc.
-      </p>
-    </div>
-  `;
-
-  // Load html2canvas
-  const script = document.createElement('script');
-  script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-  document.head.appendChild(script);
-
-  const nameInput = document.getElementById('name');
-  const dateInput = document.getElementById('birthdate');
-  const cardContainer = document.getElementById('countdownCard');
-  const shareBtn = document.getElementById('shareCardBtn');
-  const shareHint = document.getElementById('shareHint');
-
-  const yourSiteURL = "https://smartkitshub.vercel.app"; // <-- Replace with your actual URL
-
-  document.getElementById('countdownBtn').onclick = () => {
-    const name = nameInput.value.trim();
-    const dateStr = dateInput.value;
-
-    if (!name || !dateStr) {
-      cardContainer.innerHTML = "<p>Please enter your name and birthday.</p>";
-      shareBtn.style.display = "none";
-      shareHint.style.display = "none";
-      return;
-    }
-
-    const formattedName = name.split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-
-    const today = new Date();
-    const birthDate = new Date(dateStr);
-    let nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
-    if (nextBirthday < today) nextBirthday.setFullYear(today.getFullYear() + 1);
-    const diffDays = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
-
-    const message = `
-      <div id="birthdayCard" style="
-        width: 300px;
-        padding: 20px;
-        border-radius: 15px;
-        border: 4px solid #a259ff;
-        background: linear-gradient(to bottom right, #fdfbff, #f1e6ff);
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-        color: #4b0082;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        position: relative;
-      ">
-        <h2 style="margin-bottom: 10px;">🎉 Birthday Countdown 🎉</h2>
-        <p style="font-size: 18px;">Hey <strong>${formattedName}</strong>!</p>
-        <p style="font-size: 20px;">🎂 Your birthday is in <strong>${diffDays} day${diffDays !== 1 ? 's' : ''}</strong>!</p>
-        <p style="margin-top: 10px;">💜 HBD in advance! 💜</p>
-        <a href="${yourSiteURL}" target="_blank" style="
-          display: block;
-          margin-top: 15px;
-          font-size: 12px;
-          color: #4b0082;
-          text-decoration: underline;
-        ">Visit Finance Tools for more cool stuff</a>
+    <!-- Age Calculator -->
+    <div id="ageCalculator" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Age Calculator 🎂</h1>
+        <label for="dob">Select your date of birth:</label>
+        <input type="date" id="dob" />
+        <button id="calcAgeBtn">Calculate Age</button>
+        <div id="result" class="tool-result" style="margin-top:15px;"></div>
       </div>
-    `;
-
-    cardContainer.innerHTML = message;
-    shareBtn.style.display = "inline-block";
-    shareHint.style.display = "block";
-  };
-
-  shareBtn.onclick = () => {
-    const card = document.getElementById('birthdayCard');
-    if (!card) return;
-
-    html2canvas(card).then(canvas => {
-      canvas.toBlob(blob => {
-        const file = new File([blob], "birthday-card.png", { type: 'image/png' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({
-            files: [file],
-            title: 'Birthday Countdown 🎉',
-            text: 'Check out this birthday card!',
-          }).catch(err => console.error('Sharing failed:', err));
-        } else {
-          // Fallback: Download
-          const link = document.createElement('a');
-          link.download = file.name;
-          link.href = URL.createObjectURL(blob);
-          link.click();
-          alert("✅ Image downloaded. You can now send it on WhatsApp, Instagram, or anywhere.");
-        }
-      }, 'image/png');
-    });
-  };
-}
-
-
-
-  else if (toolKey === 'randomJoke') {
-  mainContent.innerHTML = `
-    <div class="tool-card">
-      <h1>Random Joke Generator 😂</h1>
-      <button id="jokeBtn">Tell me 5 Random jokes</button>
-      <div id="jokeArea" class="tool-result" style="margin-top: 20px;"></div>
     </div>
-  `;
 
-  document.getElementById('jokeBtn').onclick = async () => {
-    const btn = document.getElementById('jokeBtn');
-    const area = document.getElementById('jokeArea');
-    btn.disabled = true;
-    btn.textContent = "Loading...";
+    <!-- Birthday Countdown -->
+    <div id="birthdayCountdown" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Birthday Countdown 🎉</h1>
 
-    // Show centered spinner
-    area.innerHTML = `<div class="loader-center"></div>`;
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" placeholder="e.g. Bola" />
 
-    // Wait for 3 spins (3 seconds)
-    await new Promise(res => setTimeout(res, 3000));
+        <label for="birthdate">Your Birthday:</label>
+        <input type="date" id="birthdate" />
 
-    try {
-      // Clear spinner
-      area.innerHTML = "";
+        <button id="countdownBtn">Generate Card</button>
 
-      // Fetch 5 jokes
-      const fetches = Array.from({ length: 5 }, () =>
-        fetch("https://official-joke-api.appspot.com/random_joke").then(r => r.json())
-      );
-      const results = await Promise.all(fetches);
+        <div id="countdownCard" style="margin-top:20px;"></div>
 
-      // Show jokes one by one
-      for (let i = 0; i < results.length; i++) {
-        const { setup, punchline } = results[i];
+        <button id="shareCardBtn" style="display:none; margin-top:10px;">📤 Share / Download Card</button>
+        <p id="shareHint" style="display:none; font-size:0.9em; color:gray; margin-top:8px;">
+          If share doesn't work, the card will be downloaded instead. You can then send it via WhatsApp, IG, etc.
+        </p>
+      </div>
+    </div>
 
-        const jokeDiv = document.createElement("div");
-        jokeDiv.style.marginBottom = "20px";
-        jokeDiv.innerHTML = `
-          <strong>🃏Joke ${i + 1}:</strong><br/>
-          <span>${setup}</span>
-        `;
-        area.appendChild(jokeDiv);
+    <!-- Random Joke -->
+    <div id="randomJoke" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Random Joke Generator 😂</h1>
+        <button id="jokeBtn">Tell me 5 Random jokes</button>
+        <div id="jokeArea" class="tool-result" style="margin-top: 20px;"></div>
+      </div>
+    </div>
 
-        // Delay before punchline
-        await new Promise(res => setTimeout(res, 1000));
+    <!-- Love Calculator -->
+    <div id="loveCalculator" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Love Calculator ❤️</h1>
+        <label for="name1">Your Name:</label>
+        <input type="text" id="name1" placeholder="Enter your name" />
+        <label for="name2">Their Name:</label>
+        <input type="text" id="name2" placeholder="Enter their name" />
+        <button id="loveCalcBtn">Calculate Love 🔥</button>
+        <div id="loveResult" class="tool-result" style="margin-top:15px;"></div>
+        <button id="shareLoveBtn" style="display:none; margin-top:15px;">📤 Share / Download Card</button>
+      </div>
+    </div>
 
-        const punch = document.createElement("p");
-        punch.textContent = punchline;
-        punch.style.color = "#666";
-        punch.style.marginLeft = "10px";
-        area.appendChild(punch);
+    <!-- Mind Quiz -->
+    <div id="mindQuiz" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Mind Quiz / Riddles 🧠</h1>
+        <div id="quizQuestion" style="font-size:20px; font-weight:600; margin-bottom: 18px;"></div>
+        <div id="quizOptions"></div>
+        <div id="quizFeedback" class="tool-result"></div>
+        <button id="quizNextBtn" style="display:none; margin-top: 20px;">Next Question</button>
+        <button id="quizRestartBtn" style="display:none; margin-top: 20px; background:#c0392b;">Restart Quiz</button>
+      </div>
+    </div>
 
-        // Delay before next joke
-        await new Promise(res => setTimeout(res, 800));
+    <!-- Mood Tracker -->
+    <div id="moodTracker" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Mood Tracker 😊</h1>
+        <label for="moodSelect">Mood for selected day:</label>
+        <select id="moodSelect" style="margin-right:8px;">
+          <option value="" disabled selected>Select</option>
+          <option value="happy">Happy 😄</option>
+          <option value="sad">Sad 😢</option>
+          <option value="angry">Angry 😠</option>
+          <option value="excited">Excited 🤩</option>
+          <option value="anxious">Anxious 😰</option>
+        </select>
+        <input type="text" id="moodReason" placeholder="Reason (optional)" style="width:60%;" />
+        <button id="saveMoodBtn" style="margin-left:8px;">Save</button>
+
+        <table style="width:100%; border-collapse: collapse; margin-top:20px;">
+          <thead>
+            <tr>
+              <th style="border-bottom:1px solid #ccc; padding:8px;">Day</th>
+              <th style="border-bottom:1px solid #ccc; padding:8px;">Mood</th>
+              <th style="border-bottom:1px solid #ccc; padding:8px;">Reason</th>
+              <th style="border-bottom:1px solid #ccc; padding:8px;">Saved</th>
+              <th style="border-bottom:1px solid #ccc; padding:8px;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="moodTableBody"></tbody>
+        </table>
+
+        <div id="weeklyAdvice" style="margin-top:20px;"></div>
+      </div>
+    </div>
+
+    <!-- Name Compatibility -->
+    <div id="nameCompatibility" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Name Compatibility Test 💘</h1>
+        <label for="compName1">Your Name:</label>
+        <input type="text" id="compName1" placeholder="e.g. Sarah" />
+        <label for="compName2">Partner's Name:</label>
+        <input type="text" id="compName2" placeholder="e.g. Daniel" />
+        <button id="compatibilityBtn">💞 Check Compatibility</button>
+        <div id="compatResult" style="margin-top:20px;"></div>
+        <button id="shareCompatBtn" style="display:none; margin-top:15px;">📥 Share / Download</button>
+      </div>
+    </div>
+
+    <!-- Zodiac Sign Finder -->
+    <div id="zodiacSignFinder" class="content-box hidden">
+      <div class="tool-card">
+        <h1>Zodiac Sign Finder ♈</h1>
+        <label for="zodiacDob">Select your date of birth:</label>
+        <input type="date" id="zodiacDob" />
+        <button id="findZodiacBtn">Find Zodiac Sign</button>
+        <div id="zodiacResult" class="tool-result" style="margin-top:15px;"></div>
+        <button id="shareZodiacBtn" style="display:none; margin-top:15px;">📥 Share / Download Sign</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentActiveNav = 'welcome';
+    const stored = {}; // In-memory storage for mood tracker
+
+    function showContent(id) {
+      // Hide all content boxes
+      const boxes = document.querySelectorAll('.content-box');
+      boxes.forEach(box => box.classList.add('hidden'));
+      
+      // Show selected content
+      document.getElementById(id).classList.remove('hidden');
+      
+      // Update active tool-icon
+      const toolIcons = document.querySelectorAll('.tool-icon');
+      toolIcons.forEach(icon => icon.classList.remove('active'));
+      
+      // Update active nav-item
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => item.classList.remove('active'));
+      
+      // Find and activate the correct buttons
+      toolIcons.forEach(icon => {
+        if (icon.onclick.toString().includes(`'${id}'`)) {
+          icon.classList.add('active');
+        }
+      });
+      
+      navItems.forEach(item => {
+        if (item.onclick.toString().includes(`'${id}'`)) {
+          item.classList.add('active');
+        }
+      });
+      
+      currentActiveNav = id;
+      closeExpanded(); // Close expanded menu after selection
+      
+      // Initialize specific tools when shown
+      if (id === 'ageCalculator') {
+        initAgeCalculator();
+      } else if (id === 'birthdayCountdown') {
+        initBirthdayCountdown();
+      } else if (id === 'randomJoke') {
+        initRandomJoke();
+      } else if (id === 'loveCalculator') {
+        initLoveCalculator();
+      } else if (id === 'mindQuiz') {
+        initMindQuiz();
+      } else if (id === 'moodTracker') {
+        initMoodTracker();
+      } else if (id === 'nameCompatibility') {
+        initNameCompatibility();
+      } else if (id === 'zodiacSignFinder') {
+        initZodiacSignFinder();
       }
-
-    } catch {
-      area.innerHTML = "<p>❌ Failed to load jokes. Please try again.</p>";
     }
 
-    btn.disabled = false;
-    btn.textContent = "Tell me 5  Random jokes";
-  };
-}
+    function toggleExpanded() {
+      const overlay = document.getElementById('sidebarOverlay');
+      const backdrop = document.getElementById('backdrop');
+      const mainContent = document.getElementById('mainContent');
+      
+      overlay.classList.toggle('active');
+      backdrop.classList.toggle('active');
+      mainContent.classList.toggle('blurred');
+    }
 
+    function closeExpanded() {
+      const overlay = document.getElementById('sidebarOverlay');
+      const backdrop = document.getElementById('backdrop');
+      const mainContent = document.getElementById('mainContent');
+      
+      overlay.classList.remove('active');
+      backdrop.classList.remove('active');
+      mainContent.classList.remove('blurred');
+    }
 
-      else if (toolKey === 'loveCalculator') {
-        mainContent.innerHTML = `
-          <div class="tool-card">
-            <h1>Love Calculator ❤️</h1>
-            <label for="name1">Your Name:</label>
-            <input type="text" id="name1" placeholder="Enter your name" />
-            <label for="name2">Their Name:</label>
-            <input type="text" id="name2" placeholder="Enter their name" />
-            <button id="loveCalcBtn">Calculate Love 🔥</button>
-            <div id="loveResult" class="tool-result" style="margin-top:15px;"></div>
-            <button id="shareLoveBtn" style="display:none; margin-top:15px;">📤 Share / Download Card</button>
+    // Tool initialization functions
+    function initAgeCalculator() {
+      document.getElementById('calcAgeBtn').onclick = () => {
+        const dob = document.getElementById('dob').value;
+        const result = document.getElementById('result');
+
+        if (!dob) {
+          result.textContent = "📅 Please select your date of birth.";
+          return;
+        }
+
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+
+        // Age classification
+        let message = "";
+        if (age < 1) {
+          message = "👶 You're just a tiny legend. Enjoy your milk!";
+        } else if (age >= 1 && age <= 3) {
+          message = `🍼 You're ${age}! Probably in playgroup... or chewing your toys.`;
+        } else if (age >= 4 && age <= 6) {
+          message = `🎒 You're ${age}! Probably in Nursery or KG. Colors and crayons rule your world!`;
+        } else if (age >= 7 && age <= 11) {
+          message = `📚 You're ${age}! That sounds like Primary School. Homework, cartoons, and snacks!`;
+        } else if (age >= 12 && age <= 14) {
+          message = `🧠 You're ${age}. Welcome to JSS life — mood swings and math trauma unlocked.`;
+        } else if (age >= 15 && age <= 17) {
+          message = `📖 You're ${age}, likely in Senior Secondary. WAEC loading... No pressure 😉.`;
+        } else if (age >= 18 && age <= 22) {
+          message = `🎓 You're ${age}. University or fresh adulthood. Vibes + strikes + ramen noodles!`;
+        } else if (age >= 23 && age <= 30) {
+          message = `💼 You're ${age}. Probably working hard, paying bills, and pretending to be fine.`;
+        } else if (age >= 31 && age <= 45) {
+          message = `👨‍👩‍👧 You're ${age}. Possibly a parent, bossing someone or being bossed!`;
+        } else if (age >= 46 && age <= 60) {
+          message = `🧓 You're ${age}. OG level unlocked. You've seen it all! Enjoy your wisdom.`;
+        } else if (age > 60) {
+          message = `🎉 You're ${age}. A living legend! Probably telling stories that begin with "Back in my day..."`;
+        } else {
+          message = "Hmm... something feels off with the date you picked.";
+        }
+
+        result.innerHTML = `<strong>You are ${age} year${age !== 1 ? "s" : ""} old.</strong><br/><p style="margin-top:10px;">${message}</p>`;
+      };
+    }
+
+    function initBirthdayCountdown() {
+      const nameInput = document.getElementById('name');
+      const dateInput = document.getElementById('birthdate');
+      const cardContainer = document.getElementById('countdownCard');
+      const shareBtn = document.getElementById('shareCardBtn');
+      const shareHint = document.getElementById('shareHint');
+
+      const yourSiteURL = "https://smartkitshub.vercel.app";
+
+      document.getElementById('countdownBtn').onclick = () => {
+        const name = nameInput.value.trim();
+        const dateStr = dateInput.value;
+
+        if (!name || !dateStr) {
+          cardContainer.innerHTML = "<p>Please enter your name and birthday.</p>";
+          shareBtn.style.display = "none";
+          shareHint.style.display = "none";
+          return;
+        }
+
+        const formattedName = name.split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+
+        const today = new Date();
+        const birthDate = new Date(dateStr);
+        let nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+        if (nextBirthday < today) nextBirthday.setFullYear(today.getFullYear() + 1);
+        const diffDays = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+
+        const message = `
+          <div id="birthdayCard" style="
+            width: 300px;
+            padding: 20px;
+            border-radius: 15px;
+            border: 4px solid #a259ff;
+            background: linear-gradient(to bottom right, #fdfbff, #f1e6ff);
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            color: #4b0082;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+          ">
+            <h2 style="margin-bottom: 10px;">🎉 Birthday Countdown 🎉</h2>
+            <p style="font-size: 18px;">Hey <strong>${formattedName}</strong>!</p>
+            <p style="font-size: 20px;">🎂 Your birthday is in <strong>${diffDays} day${diffDays !== 1 ? 's' : ''}</strong>!</p>
+            <p style="margin-top: 10px;">💜 HBD in advance! 💜</p>
+            <a href="${yourSiteURL}" target="_blank" style="
+              display: block;
+              margin-top: 15px;
+              font-size: 12px;
+              color: #4b0082;
+              text-decoration: underline;
+            ">Visit Fun Tools for more cool stuff</a>
           </div>
         `;
 
-        // Load html2canvas if not already loaded (optional optimization)
-        if (!window.html2canvas) {
-          const script = document.createElement('script');
-          script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-          document.head.appendChild(script);
+        cardContainer.innerHTML = message;
+        shareBtn.style.display = "inline-block";
+        shareHint.style.display = "block";
+      };
+
+      shareBtn.onclick = () => {
+        const card = document.getElementById('birthdayCard');
+        if (!card) return;
+
+        html2canvas(card).then(canvas => {
+          canvas.toBlob(blob => {
+            const file = new File([blob], "birthday-card.png", { type: 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({
+                files: [file],
+                title: 'Birthday Countdown 🎉',
+                text: 'Check out this birthday card!',
+              }).catch(err => console.error('Sharing failed:', err));
+            } else {
+              const link = document.createElement('a');
+              link.download = file.name;
+              link.href = URL.createObjectURL(blob);
+              link.click();
+              alert("✅ Image downloaded. You can now send it on WhatsApp, Instagram, or anywhere.");
+            }
+          }, 'image/png');
+        });
+      };
+    }
+
+    function initRandomJoke() {
+      document.getElementById('jokeBtn').onclick = async () => {
+        const btn = document.getElementById('jokeBtn');
+        const area = document.getElementById('jokeArea');
+        btn.disabled = true;
+        btn.textContent = "Loading...";
+
+        area.innerHTML = `<div class="loader-center"></div>`;
+        await new Promise(res => setTimeout(res, 3000));
+
+        try {
+          area.innerHTML = "";
+          const fetches = Array.from({ length: 5 }, () =>
+            fetch("https://official-joke-api.appspot.com/random_joke").then(r => r.json())
+          );
+          const results = await Promise.all(fetches);
+
+          for (let i = 0; i < results.length; i++) {
+            const { setup, punchline } = results[i];
+
+            const jokeDiv = document.createElement("div");
+            jokeDiv.style.marginBottom = "20px";
+            jokeDiv.innerHTML = `
+              <strong>🃏Joke ${i + 1}:</strong><br/>
+              <span>${setup}</span>
+            `;
+            area.appendChild(jokeDiv);
+
+            await new Promise(res => setTimeout(res, 1000));
+
+            const punch = document.createElement("p");
+            punch.textContent = punchline;
+            punch.style.color = "#666";
+            punch.style.marginLeft = "10px";
+            area.appendChild(punch);
+
+            await new Promise(res => setTimeout(res, 800));
+          }
+        } catch {
+          area.innerHTML = "<p>❌ Failed to load jokes. Please try again.</p>";
         }
 
-        const yourSiteURL = "https://yourwebsite.com"; // Replace with your actual URL
+        btn.disabled = false;
+        btn.textContent = "Tell me 5 Random jokes";
+      };
+    }
 
-        document.getElementById('loveCalcBtn').onclick = () => {
-          const n1 = document.getElementById('name1').value.trim();
-          const n2 = document.getElementById('name2').value.trim();
-          const result = document.getElementById('loveResult');
-          const shareBtn = document.getElementById('shareLoveBtn');
-          shareBtn.style.display = 'none';
+    function initLoveCalculator() {
+      const yourSiteURL = "https://smartkitshub.vercel.app";
 
-          if (!n1 || !n2) {
-            result.textContent = "❗ Please enter both names.";
-            return;
-          }
+      document.getElementById('loveCalcBtn').onclick = () => {
+        const n1 = document.getElementById('name1').value.trim();
+        const n2 = document.getElementById('name2').value.trim();
+        const result = document.getElementById('loveResult');
+        const shareBtn = document.getElementById('shareLoveBtn');
+        shareBtn.style.display = 'none';
 
-          // Normalize names for calculation
-          const name1 = n1.toLowerCase().replace(/\s/g, '');
-          const name2 = n2.toLowerCase().replace(/\s/g, '');
+        if (!n1 || !n2) {
+          result.textContent = "❗ Please enter both names.";
+          return;
+        }
 
-          // Cancel common letters
-          let arr1 = name1.split('');
-          let arr2 = name2.split('');
-          arr1 = arr1.map(c => {
-            const idx = arr2.indexOf(c);
-            if (idx > -1) { arr2.splice(idx, 1); return null; }
-            return c;
-          });
+        const name1 = n1.toLowerCase().replace(/\s/g, '');
+        const name2 = n2.toLowerCase().replace(/\s/g, '');
 
-          const remaining = [...arr1.filter(Boolean), ...arr2].length;
-          const flames = ['Friends', 'Lovers', 'Admirers', 'Married', 'Enemies', 'Secret Lovers'];
-          const outcome = flames[(remaining - 1) % 6];
+        let arr1 = name1.split('');
+        let arr2 = name2.split('');
+        arr1 = arr1.map(c => {
+          const idx = arr2.indexOf(c);
+          if (idx > -1) { arr2.splice(idx, 1); return null; }
+          return c;
+        });
 
-          const extended = {
-            'Friends': "👯 You’re best friends! This bond is deep…",
-            'Lovers': "💞 Sparks are flying! You're likely lovers…",
-            'Admirers': "👀 Crush alert! One or both hearts skipping beats…",
-            'Married': "💍 Marriage vibes! You two have that forever energy…",
-            'Enemies': "😤 Love-hate energy! But maybe it's just untapped feelings…",
-            'Secret Lovers': "🤫 Secret love brewing… Something real is happening behind the scenes…"
-          }[outcome] || "";
+        const remaining = [...arr1.filter(Boolean), ...arr2].length;
+        const flames = ['Friends', 'Lovers', 'Admirers', 'Married', 'Enemies', 'Secret Lovers'];
+        const outcome = flames[(remaining - 1) % 6];
 
-          const advice = {
-            'Friends': "Cherish the friendship. It’s a foundation many romance stories start from.",
-            'Lovers': "Take it slow, build trust, keep the butterflies alive together.",
-            'Admirers': "Be brave, send that message, and see what unfolds!",
-            'Married': "Communicate, compromise, and keep choosing each other every day.",
-            'Enemies': "Talk it out—some rivalries are just stories waiting to evolve.",
-            'Secret Lovers': "Honesty and courage could transform whispers into a beautiful story."
-          }[outcome] || "";
+        const extended = {
+          'Friends': "👯 You're best friends! This bond is deep…",
+          'Lovers': "💞 Sparks are flying! You're likely lovers…",
+          'Admirers': "👀 Crush alert! One or both hearts skipping beats…",
+          'Married': "💍 Marriage vibes! You two have that forever energy…",
+          'Enemies': "😤 Love-hate energy! But maybe it's just untapped feelings…",
+          'Secret Lovers': "🤫 Secret love brewing… Something real is happening behind the scenes…"
+        }[outcome] || "";
 
-          const cardHTML = `
-            <div id="loveCard" style="
-              width: 320px;
-              padding: 20px;
-              border-radius: 12px;
-              background: linear-gradient(135deg,#fc5c7d,#6a82fb);
+        const advice = {
+          'Friends': "Cherish the friendship. It's a foundation many romance stories start from.",
+          'Lovers': "Take it slow, build trust, keep the butterflies alive together.",
+          'Admirers': "Be brave, send that message, and see what unfolds!",
+          'Married': "Communicate, compromise, and keep choosing each other every day.",
+          'Enemies': "Talk it out—some rivalries are just stories waiting to evolve.",
+          'Secret Lovers': "Honesty and courage could transform whispers into a beautiful story."
+        }[outcome] || "";
+
+        const cardHTML = `
+          <div id="loveCard" style="
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg,#fc5c7d,#6a82fb);
+            color: #fff;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            position: relative;
+          ">
+            <h2 style="margin-bottom:10px;">💖 FLAMES Result 💖</h2>
+            <p><strong>${n1}</strong> ❤️ <strong>${n2}</strong></p>
+            <h3 style="margin:10px 0;">${outcome}</h3>
+            <p style="font-size:14px;line-height:1.3;">${extended}</p>
+            <hr style="border-color: rgba(255,255,255,0.5); margin: 15px 0;" />
+            <p style="font-size:13px;"><em>${advice}</em></p>
+            <a href="${yourSiteURL}" target="_blank" style="
+              display: block;
+              margin-top: 15px;
+              font-size: 12px;
               color: #fff;
-              text-align: center;
-              font-family: 'Segoe UI', sans-serif;
-              position: relative;
-            ">
-              <h2 style="margin-bottom:10px;">💖 FLAMES Result 💖</h2>
-              <p><strong>${n1}</strong> ❤️ <strong>${n2}</strong></p>
-              <h3 style="margin:10px 0;">${outcome}</h3>
-              <p style="font-size:14px;line-height:1.3;">${extended}</p>
-              <hr style="border-color: rgba(255,255,255,0.5); margin: 15px 0;" />
-              <p style="font-size:13px;"><em>${advice}</em></p>
-              <a href="${yourSiteURL}" target="_blank" style="
-                display: block;
-                margin-top: 15px;
-                font-size: 12px;
-                color: #fff;
-                text-decoration: underline;
-              ">Visit Finance Tools for more fun!</a>
-            </div>
-          `;
+              text-decoration: underline;
+            ">Visit Fun Tools for more!</a>
+          </div>
+        `;
 
-          result.innerHTML = cardHTML;
-          shareBtn.style.display = 'block';
+        result.innerHTML = cardHTML;
+        shareBtn.style.display = 'block';
 
-          shareBtn.onclick = () => {
-            const card = document.getElementById('loveCard');
-            html2canvas(card).then(canvas => {
-              canvas.toBlob(blob => {
-                const file = new File([blob], "flames-love-card.png", { type: 'image/png' });
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                  navigator.share({ files: [file], title: 'FLAMES Love Card', text: 'Check this out!' })
-                    .catch(err => console.error(err));
-                } else {
-                  const link = document.createElement('a');
-                  link.download = file.name;
-                  link.href = URL.createObjectURL(blob);
-                  link.click();
-                  alert("✅ Image downloaded! Share it with someone special.");
-                }
-              });
+        shareBtn.onclick = () => {
+          const card = document.getElementById('loveCard');
+          html2canvas(card).then(canvas => {
+            canvas.toBlob(blob => {
+              const file = new File([blob], "flames-love-card.png", { type: 'image/png' });
+              if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({ files: [file], title: 'FLAMES Love Card', text: 'Check this out!' })
+                  .catch(err => console.error(err));
+              } else {
+                const link = document.createElement('a');
+                link.download = file.name;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                alert("✅ Image downloaded! Share it with someone special.");
+              }
             });
-          };
+          });
         };
-      }
+      };
+    }
 
-      else if (toolKey === 'mindQuiz') {
-      // Quiz questions array
+    function initMindQuiz() {
       const quizData = [
         {
           question: "What has keys but can't open locks?",
@@ -661,7 +1017,7 @@
           explanation: "A stamp on a letter can travel around the world."
         },
         {
-          question: "What has hands but can’t clap?",
+          question: "What has hands but can't clap?",
           options: ["A clock", "A robot", "A tree"],
           correctIndex: 0,
           explanation: "A clock has hands but can't clap."
@@ -669,17 +1025,6 @@
       ];
 
       let currentQ = 0;
-
-      mainContent.innerHTML = `
-        <div class="tool-card">
-          <h1>Mind Quiz / Riddles 🧠</h1>
-          <div id="quizQuestion" style="font-size:20px; font-weight:600; margin-bottom: 18px;"></div>
-          <div id="quizOptions"></div>
-          <div id="quizFeedback" class="tool-result"></div>
-          <button id="quizNextBtn" style="display:none; margin-top: 20px;">Next Question</button>
-          <button id="quizRestartBtn" style="display:none; margin-top: 20px; background:#c0392b;">Restart Quiz</button>
-        </div>
-      `;
 
       const questionEl = document.getElementById('quizQuestion');
       const optionsEl = document.getElementById('quizOptions');
@@ -705,7 +1050,6 @@
       }
 
       function handleAnswer(selectedIndex) {
-        // Disable all options
         [...optionsEl.children].forEach(btn => btn.disabled = true);
 
         const q = quizData[currentQ];
@@ -742,374 +1086,311 @@
       };
 
       loadQuestion(currentQ);
+    }
 
-    } 
-      // You can continue adding the rest (moodTracker, nameCompatibility, zodiacSignFinder) here...
+    function initMoodTracker() {
+      const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const todayName = dayNames[new Date().getDay()];
 
-      else if (toolKey === 'moodTracker') {
-    const stored = JSON.parse(localStorage.getItem('weeklyMoods')) || {};
-    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const todayName = dayNames[new Date().getDay()];
+      function saveMood(day, mood, reason) {
+        stored[day] = { mood, reason };
+        renderTable();
+        renderAdvice();
+      }
 
-    function saveMood(day, mood, reason) {
-      stored[day] = { mood, reason };
-      localStorage.setItem('weeklyMoods', JSON.stringify(stored));
+      function renderTable() {
+        const tbody = document.getElementById('moodTableBody');
+        tbody.innerHTML = '';
+        dayNames.forEach(day => {
+          const entry = stored[day] || {};
+          const saved = !!entry.mood;
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td style="padding:8px;">${day}</td>
+            <td style="padding:8px;">${saved ? entry.mood : '-'}</td>
+            <td style="padding:8px;">${saved ? entry.reason || '-' : '-'}</td>
+            <td style="padding:8px; text-align:center;">
+              ${saved ? '<span style="color:green;">✔️</span>' : ''}
+            </td>
+            <td style="padding:8px; text-align:center;">
+              <button ${day !== todayName && !stored[day] ? 'disabled' : ''}
+                      data-day="${day}" class="editBtn">
+                ${saved ? 'Edit' : (day === todayName ? 'Add' : '')}
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        document.querySelectorAll('.editBtn').forEach(btn => {
+          btn.onclick = () => {
+            const day = btn.getAttribute('data-day');
+            document.getElementById('moodSelect').value = stored[day]?.mood || '';
+            document.getElementById('moodReason').value = stored[day]?.reason || '';
+            document.getElementById('saveMoodBtn').dataset.day = day;
+          };
+        });
+      }
+
+      function renderAdvice() {
+        const box = document.getElementById('weeklyAdvice');
+        const entries = Object.values(stored);
+        if (entries.length < 7) {
+          box.innerHTML = `<em>Complete all 7 days to see your weekly summary and advice.</em>`;
+          return;
+        }
+        const counts = entries.reduce((acc, e) => { acc[e.mood] = (acc[e.mood] || 0) + 1; return acc; }, {});
+        const dominant = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+
+        const adviceMap = {
+          happy: "Your week was full of joy — keep it up with the things that spark your smile.",
+          sad: "Take time to heal and reconnect with self-care and supportive friends.",
+          angry: "Try directed release—like exercise or journaling—to channel tension positively.",
+          excited: "Use your energy to plan or create something meaningful this coming week.",
+          anxious: "Practice grounding and mindfulness. Small steps build big calm."
+        };
+        box.innerHTML = `
+          <h3>🧠 Weekly Mood Summary</h3>
+          <p><strong>Dominant Mood:</strong> ${dominant.toUpperCase()} (${counts[dominant]} days)</p>
+          <p>${adviceMap[dominant] || ''}</p>
+        `;
+      }
+
+      document.getElementById('saveMoodBtn').onclick = () => {
+        const mood = document.getElementById('moodSelect').value;
+        const reason = document.getElementById('moodReason').value.trim();
+        const day = document.getElementById('saveMoodBtn').dataset.day || todayName;
+
+        if (!mood) {
+          alert("Please pick a mood.");
+          return;
+        }
+        if (day !== todayName && !stored[day]) {
+          alert("You can only log mood for today or edit existing.");
+          return;
+        }
+
+        saveMood(day, mood, reason);
+        document.getElementById('moodSelect').value = '';
+        document.getElementById('moodReason').value = '';
+        delete document.getElementById('saveMoodBtn').dataset.day;
+      };
+
       renderTable();
       renderAdvice();
     }
 
-    function renderTable() {
-      const tbody = document.getElementById('moodTableBody');
-      tbody.innerHTML = '';
-      dayNames.forEach(day => {
-        const entry = stored[day] || {};
-        const saved = !!entry.mood;
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td style="padding:8px;">${day}</td>
-          <td style="padding:8px;">${saved ? entry.mood : '-'}</td>
-          <td style="padding:8px;">${saved ? entry.reason || '-' : '-'}</td>
-          <td style="padding:8px; text-align:center;">
-            ${saved ? '<span style="color:green;">✔️</span>' : ''}
-          </td>
-          <td style="padding:8px; text-align:center;">
-            <button ${day !== todayName && !stored[day] ? 'disabled' : ''}
-                    data-day="${day}" class="editBtn">
-              ${saved ? 'Edit' : (day === todayName ? 'Add' : '')}
-            </button>
-          </td>
+    function initNameCompatibility() {
+      const yourSiteURL = "https://smartkitshub.vercel.app";
+
+      document.getElementById('compatibilityBtn').onclick = () => {
+        const n1 = document.getElementById('compName1').value.trim();
+        const n2 = document.getElementById('compName2').value.trim();
+        const result = document.getElementById('compatResult');
+        const shareBtn = document.getElementById('shareCompatBtn');
+        shareBtn.style.display = 'none';
+
+        if (!n1 || !n2) {
+          result.innerHTML = `<span style="color:red;">❗Please enter both names.</span>`;
+          return;
+        }
+
+        const freq = name => name.toLowerCase().split('').reduce((acc, c) => {
+          if (/[a-z]/i.test(c)) acc[c] = (acc[c] || 0) + 1;
+          return acc;
+        }, {});
+        const f1 = freq(n1), f2 = freq(n2);
+        let score = 0, max = 0;
+        new Set([...Object.keys(f1), ...Object.keys(f2)]).forEach(l => {
+          const c1 = f1[l] || 0, c2 = f2[l] || 0;
+          score += Math.min(c1, c2);
+          max += Math.max(c1, c2);
+        });
+        const percent = max === 0 ? 0 : Math.round((score / max) * 100);
+
+        let emoji, message;
+        if (percent >= 85) {
+          emoji = '💖';
+          message = `You're name soulmates! Your energies align effortlessly. Nurture this connection with communication and laughter — it's worth it.`;
+        } else if (percent >= 65) {
+          emoji = '❤️';
+          message = `You have a strong compatibility! You two can build something meaningful with shared effort and care.`;
+        } else if (percent >= 45) {
+          emoji = '💛';
+          message = `You're halfway there! Get to know each other more and let the sparks grow naturally.`;
+        } else if (percent >= 25) {
+          emoji = '🌀';
+          message = `Bit of a rocky start, but don't count each other out. Conversations can unlock deeper compatibility.`;
+        } else {
+          emoji = '💔';
+          message = `Low compatibility, but don't be discouraged. Real relationships go beyond just names. Stay open, and love may still blossom.`;
+        }
+
+        result.innerHTML = `
+          <div id="compatCard" style="
+            background: #6a0dad; padding: 40px 20px; border-radius: 16px;
+            max-width: 500px; margin: auto; color: white; font-family: 'Segoe UI', sans-serif;
+            text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            position: relative;
+          ">
+            <div style="background:white; color:#6a0dad; border-radius: 12px; padding: 25px;">
+              <h2 style="margin: 0; font-size: 28px;">${emoji} ${percent}% Compatible</h2>
+              <h3 style="margin: 10px 0 15px;">${n1.toUpperCase()} ❤️ ${n2.toUpperCase()}</h3>
+              <p style="font-size: 16px;">${message}</p>
+            </div>
+            <a href="${yourSiteURL}" target="_blank" style="
+              display: block;
+              margin-top: 15px;
+              font-size: 12px;
+              color: white;
+              text-decoration: underline;
+            ">Visit Fun Tools for more!</a>
+          </div>
         `;
-        tbody.appendChild(row);
-      });
 
-      document.querySelectorAll('.editBtn').forEach(btn => {
-        btn.onclick = () => {
-          const day = btn.getAttribute('data-day');
-          document.getElementById('moodSelect').value = stored[day]?.mood || '';
-          document.getElementById('moodReason').value = stored[day]?.reason || '';
-          document.getElementById('saveMoodBtn').dataset.day = day;
-        };
-      });
-    }
+        shareBtn.style.display = 'inline-block';
 
-    function renderAdvice() {
-      const box = document.getElementById('weeklyAdvice');
-      const entries = Object.values(stored);
-      if (entries.length < 7) {
-        box.innerHTML = `<em>Complete all 7 days to see your weekly summary and advice.</em>`;
-        return;
-      }
-      const counts = entries.reduce((acc, e) => { acc[e.mood] = (acc[e.mood] || 0) + 1; return acc; }, {});
-      const dominant = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
-
-      const adviceMap = {
-        happy: "Your week was full of joy — keep it up with the things that spark your smile.",
-        sad: "Take time to heal and reconnect with self-care and supportive friends.",
-        angry: "Try directed release—like exercise or journaling—to channel tension positively.",
-        excited: "Use your energy to plan or create something meaningful this coming week.",
-        anxious: "Practice grounding and mindfulness. Small steps build big calm."
-      };
-      box.innerHTML = `
-        <h3>🧠 Weekly Mood Summary</h3>
-        <p><strong>Dominant Mood:</strong> ${dominant.toUpperCase()} (${counts[dominant]} days)</p>
-        <p>${adviceMap[dominant] || ''}</p>
-      `;
-    }
-
-    mainContent.innerHTML = `
-      <div class="tool-card">
-        <h1>Mood Tracker 😊</h1>
-        <label for="moodSelect">Mood for selected day:</label>
-        <select id="moodSelect" style="margin-right:8px;">
-          <option value="" disabled selected>Select</option>
-          <option value="happy">Happy 😄</option>
-          <option value="sad">Sad 😢</option>
-          <option value="angry">Angry 😠</option>
-          <option value="excited">Excited 🤩</option>
-          <option value="anxious">Anxious 😰</option>
-        </select>
-        <input type="text" id="moodReason" placeholder="Reason (optional)" style="width:60%;" />
-        <button id="saveMoodBtn" style="margin-left:8px;">Save</button>
-
-        <table style="width:100%; border-collapse: collapse; margin-top:20px;">
-          <thead>
-            <tr>
-              <th style="border-bottom:1px solid #ccc; padding:8px;">Day</th>
-              <th style="border-bottom:1px solid #ccc; padding:8px;">Mood</th>
-              <th style="border-bottom:1px solid #ccc; padding:8px;">Reason</th>
-              <th style="border-bottom:1px solid #ccc; padding:8px;">Saved</th>
-              <th style="border-bottom:1px solid #ccc; padding:8px;">Action</th>
-            </tr>
-          </thead>
-          <tbody id="moodTableBody"></tbody>
-        </table>
-
-        <div id="weeklyAdvice" style="margin-top:20px;"></div>
-      </div>
-    `;
-
-    document.getElementById('saveMoodBtn').onclick = () => {
-      const mood = document.getElementById('moodSelect').value;
-      const reason = document.getElementById('moodReason').value.trim();
-      const day = document.getElementById('saveMoodBtn').dataset.day || todayName;
-
-      if (!mood) {
-        alert("Please pick a mood.");
-        return;
-      }
-      if (day !== todayName && !stored[day]) {
-        alert("You can only log mood for today or edit existing.");
-        return;
-      }
-
-      saveMood(day, mood, reason);
-      document.getElementById('moodSelect').value = '';
-      document.getElementById('moodReason').value = '';
-      delete document.getElementById('saveMoodBtn').dataset.day;
-    };
-
-    renderTable();
-    renderAdvice();
-  }
-  else if (toolKey === 'nameCompatibility') {
-  mainContent.innerHTML = `
-    <div class="tool-card">
-      <h1>Name Compatibility Test 💘</h1>
-      <label for="compName1">Your Name:</label>
-      <input type="text" id="compName1" placeholder="e.g. Sarah" />
-      <label for="compName2">Partner’s Name:</label>
-      <input type="text" id="compName2" placeholder="e.g. Daniel" />
-      <button id="compatibilityBtn">💞 Check Compatibility</button>
-      <div id="compatResult" style="margin-top:20px;"></div>
-      <button id="shareCompatBtn" style="display:none; margin-top:15px;">📥 Share / Download</button>
-    </div>
-  `;
-
-  const yourSiteURL = "https://smartkitshub.vercel.app"; // replace with your actual URL
-
-  document.getElementById('compatibilityBtn').onclick = () => {
-    const n1 = document.getElementById('compName1').value.trim();
-    const n2 = document.getElementById('compName2').value.trim();
-    const result = document.getElementById('compatResult');
-    const shareBtn = document.getElementById('shareCompatBtn');
-    shareBtn.style.display = 'none';
-
-    if (!n1 || !n2) {
-      result.innerHTML = `<span style="color:red;">❗Please enter both names.</span>`;
-      return;
-    }
-
-    const freq = name => name.toLowerCase().split('').reduce((acc, c) => {
-      if (/[a-z]/i.test(c)) acc[c] = (acc[c] || 0) + 1;
-      return acc;
-    }, {});
-    const f1 = freq(n1), f2 = freq(n2);
-    let score = 0, max = 0;
-    new Set([...Object.keys(f1), ...Object.keys(f2)]).forEach(l => {
-      const c1 = f1[l] || 0, c2 = f2[l] || 0;
-      score += Math.min(c1, c2);
-      max += Math.max(c1, c2);
-    });
-    const percent = max === 0 ? 0 : Math.round((score / max) * 100);
-
-    let emoji, message;
-    if (percent >= 85) {
-      emoji = '💖';
-      message = `You’re name soulmates! Your energies align effortlessly. Nurture this connection with communication and laughter — it's worth it.`;
-    } else if (percent >= 65) {
-      emoji = '❤️';
-      message = `You have a strong compatibility! You two can build something meaningful with shared effort and care.`;
-    } else if (percent >= 45) {
-      emoji = '💛';
-      message = `You're halfway there! Get to know each other more and let the sparks grow naturally.`;
-    } else if (percent >= 25) {
-      emoji = '🌀';
-      message = `Bit of a rocky start, but don’t count each other out. Conversations can unlock deeper compatibility.`;
-    } else {
-      emoji = '💔';
-      message = `Low compatibility, but don’t be discouraged. Real relationships go beyond just names. Stay open, and love may still blossom.`;
-    }
-
-    result.innerHTML = `
-      <div id="compatCard" style="
-        background: #6a0dad; padding: 40px 20px; border-radius: 16px;
-        max-width: 500px; margin: auto; color: white; font-family: 'Segoe UI', sans-serif;
-        text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-        position: relative;
-      ">
-        <div style="background:white; color:#6a0dad; border-radius: 12px; padding: 25px;">
-          <h2 style="margin: 0; font-size: 28px;">${emoji} ${percent}% Compatible</h2>
-          <h3 style="margin: 10px 0 15px;">${n1.toUpperCase()} ❤️ ${n2.toUpperCase()}</h3>
-          <p style="font-size: 16px;">${message}</p>
-        </div>
-        <a href="${yourSiteURL}" target="_blank" style="
-          display: block;
-          margin-top: 15px;
-          font-size: 12px;
-          color: white;
-          text-decoration: underline;
-        ">Visit Finance Tools for more fun!</a>
-      </div>
-    `;
-
-    shareBtn.style.display = 'inline-block';
-
-    shareBtn.onclick = () => {
-      const card = document.getElementById('compatCard');
-      html2canvas(card).then(canvas => {
-        canvas.toBlob(blob => {
-          const file = new File([blob], "compatibility-card.png", { type: 'image/png' });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({
-              files: [file],
-              title: "Name Compatibility",
-              text: "Check out our compatibility score!"
-            }).catch(console.error);
-          } else {
-            const a = document.createElement('a');
-            a.download = "compatibility-card.png";
-            a.href = URL.createObjectURL(blob);
-            a.click();
-          }
-        });
-      });
-    };
-  };
-}
-
-  else if (toolKey === 'zodiacSignFinder') {
-    mainContent.innerHTML = `
-      <div class="tool-card">
-        <h1>Zodiac Sign Finder</h1>
-        <label for="zodiacDob">Select your date of birth:</label>
-        <input type="date" id="zodiacDob" />
-        <button id="findZodiacBtn">Find Zodiac Sign</button>
-        <div id="zodiacResult" class="tool-result" style="margin-top:15px;"></div>
-        <button id="shareZodiacBtn" style="display:none; margin-top:15px;">📥 Share / Download Sign</button>
-      </div>
-    `;
-
-    function getZodiacSign(day, month) {
-      if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return "Aquarius";
-      if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) return "Pisces";
-      if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return "Aries";
-      if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return "Taurus";
-      if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return "Gemini";
-      if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return "Cancer";
-      if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return "Leo";
-      if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return "Virgo";
-      if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return "Libra";
-      if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return "Scorpio";
-      if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return "Sagittarius";
-      if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return "Capricorn";
-      return "Unknown";
-    }
-
-    const signColors = {
-      Aquarius: "#4ca6ff",
-      Pisces: "#00a698",
-      Aries: "#ff4500",
-      Taurus: "#8a2be2",
-      Gemini: "#ffd700",
-      Cancer: "#ff69b4",
-      Leo: "#ff8c00",
-      Virgo: "#228b22",
-      Libra: "#00ced1",
-      Scorpio: "#800020",
-      Sagittarius: "#7b68ee",
-      Capricorn: "#dc143c"
-    };
-
-    const signFacts = {
-      Aquarius: "Did you know: Aquarians often think outside the box and can come across as distant—but they care deeply beneath the surface.",
-      Pisces: "Fun fact: Pisces are ultra-empathetic and intuitive—sometimes they feel other people’s emotions as their own.",
-      Aries: "Aries info: You’re a born leader—brave, bold, and sometimes impatient—but always ready to take charge.",
-      Taurus: "Taurus fact: You seek stability and comfort; you’re loyal and practical... with a guilty pleasure for indulgence.",
-      Gemini: "Gemini note: Your dual nature makes you adaptable, curious, and a magnet for conversations.",
-      Cancer: "Cancer insight: You’re nurturing and protective. You feel things deeply and value your inner circle.",
-      Leo: "Leo detail: Full of warmth and generosity, you shine bright and love being in the spotlight.",
-      Virgo: "Virgo trivia: You’re incredibly observant and organized—practical to the bone, but sensitive at heart.",
-      Libra: "Libra highlight: You crave harmony and fairness—you make great mediators and love meaningful connection.",
-      Scorpio: "Scorpio secret: You’re passionate and deep. People either love you or fear how intense you can be.",
-      Sagittarius: "Sagittarius tidbit: Adventurous, philosophical, free-spirited—you’re always chasing the horizon.",
-      Capricorn: "Capricorn note: Ambitious and determined, you hold yourself to high standards—but you also appreciate tradition."
-    };
-
-    const yourSiteURL = "https://smartkitshub.vercel.app"; // Change this to your site URL
-
-    document.getElementById('findZodiacBtn').onclick = () => {
-      const val = document.getElementById('zodiacDob').value;
-      const resultEl = document.getElementById('zodiacResult');
-      const shareBtn = document.getElementById('shareZodiacBtn');
-      shareBtn.style.display = "none";
-      resultEl.innerHTML = "";
-
-      if (!val) {
-        resultEl.textContent = "Please select your date of birth.";
-        return;
-      }
-
-      const d = new Date(val);
-      const day = d.getDate(), month = d.getMonth() + 1;
-      const sign = getZodiacSign(day, month);
-
-      const color = signColors[sign] || "#333";
-      const fact = signFacts[sign] || "";
-
-      resultEl.innerHTML = `
-        <div id="zodiacCard" style="
-          max-width: 400px;
-          margin: auto;
-          background: ${color};
-          padding: 30px;
-          border-radius: 16px;
-          color: white;
-          text-align: center;
-          font-family: 'Segoe UI', sans-serif;
-          box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-          position: relative;
-        ">
-          <h2 style="font-size:28px; margin:0 0 10px;">${sign} ♈</h2>
-          <p style="font-size:18px; margin:0 0 15px;">Born ${d.toDateString()}</p>
-          <p style="font-size:14px; line-height:1.4;">${fact}</p>
-          <a href="${yourSiteURL}" target="_blank" style="
-            display: block;
-            margin-top: 20px;
-            font-size: 12px;
-            color: white;
-            text-decoration: underline;
-          ">Visit Finance Tools for more fun!</a>
-        </div>
-      `;
-      shareBtn.style.display = 'inline-block';
-
-      shareBtn.onclick = () => {
-        const card = document.getElementById('zodiacCard');
-        html2canvas(card).then(canvas => {
-          canvas.toBlob(blob => {
-            const file = new File([blob], "zodiac-sign.png", { type: "image/png" });
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-              navigator.share({
-                files: [file],
-                title: `${sign} Zodiac`,
-                text: `Check out my zodiac sign: ${sign}`
-              }).catch(console.error);
-            } else {
-              const link = document.createElement('a');
-              link.download = file.name;
-              link.href = URL.createObjectURL(blob);
-              link.click();
-            }
+        shareBtn.onclick = () => {
+          const card = document.getElementById('compatCard');
+          html2canvas(card).then(canvas => {
+            canvas.toBlob(blob => {
+              const file = new File([blob], "compatibility-card.png", { type: 'image/png' });
+              if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                  files: [file],
+                  title: "Name Compatibility",
+                  text: "Check out our compatibility score!"
+                }).catch(console.error);
+              } else {
+                const a = document.createElement('a');
+                a.download = "compatibility-card.png";
+                a.href = URL.createObjectURL(blob);
+                a.click();
+              }
+            });
           });
-        });
+        };
       };
-    };
-  }
-
- else {
-      mainContent.innerHTML = "<p>Tool not found.</p>";
     }
-  }
+
+    function initZodiacSignFinder() {
+      function getZodiacSign(day, month) {
+        if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return "Aquarius";
+        if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) return "Pisces";
+        if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return "Aries";
+        if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return "Taurus";
+        if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return "Gemini";
+        if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return "Cancer";
+        if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return "Leo";
+        if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return "Virgo";
+        if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return "Libra";
+        if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return "Scorpio";
+        if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return "Sagittarius";
+        if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return "Capricorn";
+        return "Unknown";
+      }
+
+      const signColors = {
+        Aquarius: "#4ca6ff", Pisces: "#00a698", Aries: "#ff4500", Taurus: "#8a2be2",
+        Gemini: "#ffd700", Cancer: "#ff69b4", Leo: "#ff8c00", Virgo: "#228b22",
+        Libra: "#00ced1", Scorpio: "#800020", Sagittarius: "#7b68ee", Capricorn: "#dc143c"
+      };
+
+      const signFacts = {
+        Aquarius: "Did you know: Aquarians often think outside the box and can come across as distant—but they care deeply beneath the surface.",
+        Pisces: "Fun fact: Pisces are ultra-empathetic and intuitive—sometimes they feel other people's emotions as their own.",
+        Aries: "Aries info: You're a born leader—brave, bold, and sometimes impatient—but always ready to take charge.",
+        Taurus: "Taurus fact: You seek stability and comfort; you're loyal and practical... with a guilty pleasure for indulgence.",
+        Gemini: "Gemini note: Your dual nature makes you adaptable, curious, and a magnet for conversations.",
+        Cancer: "Cancer insight: You're nurturing and protective. You feel things deeply and value your inner circle.",
+        Leo: "Leo detail: Full of warmth and generosity, you shine bright and love being in the spotlight.",
+        Virgo: "Virgo trivia: You're incredibly observant and organized—practical to the bone, but sensitive at heart.",
+        Libra: "Libra highlight: You crave harmony and fairness—you make great mediators and love meaningful connection.",
+        Scorpio: "Scorpio secret: You're passionate and deep. People either love you or fear how intense you can be.",
+        Sagittarius: "Sagittarius tidbit: Adventurous, philosophical, free-spirited—you're always chasing the horizon.",
+        Capricorn: "Capricorn note: Ambitious and determined, you hold yourself to high standards—but you also appreciate tradition."
+      };
+
+      const yourSiteURL = "https://smartkitshub.vercel.app";
+
+      document.getElementById('findZodiacBtn').onclick = () => {
+        const val = document.getElementById('zodiacDob').value;
+        const resultEl = document.getElementById('zodiacResult');
+        const shareBtn = document.getElementById('shareZodiacBtn');
+        shareBtn.style.display = "none";
+        resultEl.innerHTML = "";
+
+        if (!val) {
+          resultEl.textContent = "Please select your date of birth.";
+          return;
+        }
+
+        const d = new Date(val);
+        const day = d.getDate(), month = d.getMonth() + 1;
+        const sign = getZodiacSign(day, month);
+
+        const color = signColors[sign] || "#333";
+        const fact = signFacts[sign] || "";
+
+        resultEl.innerHTML = `
+          <div id="zodiacCard" style="
+            max-width: 400px;
+            margin: auto;
+            background: ${color};
+            padding: 30px;
+            border-radius: 16px;
+            color: white;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+            position: relative;
+          ">
+            <h2 style="font-size:28px; margin:0 0 10px;">${sign} ♈</h2>
+            <p style="font-size:18px; margin:0 0 15px;">Born ${d.toDateString()}</p>
+            <p style="font-size:14px; line-height:1.4;">${fact}</p>
+            <a href="${yourSiteURL}" target="_blank" style="
+              display: block;
+              margin-top: 20px;
+              font-size: 12px;
+              color: white;
+              text-decoration: underline;
+            ">Visit Fun Tools for more!</a>
+          </div>
+        `;
+        shareBtn.style.display = 'inline-block';
+
+        shareBtn.onclick = () => {
+          const card = document.getElementById('zodiacCard');
+          html2canvas(card).then(canvas => {
+            canvas.toBlob(blob => {
+              const file = new File([blob], "zodiac-sign.png", { type: "image/png" });
+              if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                  files: [file],
+                  title: `${sign} Zodiac`,
+                  text: `Check out my zodiac sign: ${sign}`
+                }).catch(console.error);
+              } else {
+                const link = document.createElement('a');
+                link.download = file.name;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+              }
+            });
+          });
+        };
+      };
+    }
+
+    // Initialize
+    showContent('welcome');
+
+    // Close expanded sidebar with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeExpanded();
+      }
+    });
 
   </script>
 
