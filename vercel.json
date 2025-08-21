@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/ads.txt",
+      "dest": "/ads.txt"
+    },
+    {
       "src": "/(.*\\.html)$",
       "dest": "/landing-page/$1"
     },
